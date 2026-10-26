@@ -179,7 +179,7 @@ const COLS=["rep","lotes","eventos","movs","fin"];
 const DEF_CFG={granja:"Mi Granja Porcina",moneda:"C$",gest:114,lact:21};
 const LS_KEY="granja-porcina-v1";
 const LIC_KEY="granja-porcina-licencia";
-const PUB={"kty":"EC","x":"cTSLNm6Wig1-1jyG2DeLH2W17jKbN4zYyj4odaViGZo","y":"ydfmovN2C5_Qzrk_JzV-KqbD2pTEgGjd-cJ7pVjHYSI","crv":"P-256"};
+const PUB={"kty": "EC", "crv": "P-256", "x": "yXJlQaNsBkNe0ieFiwq0FOQp0Y4UZ9MzKSCBEe3kJ9o", "y": "YLsPvu5_Yp6jU1BSMOp3EJDUKlAVklUtsz4ApXODPlU"};
 
 /* ---------- Utilidades ---------- */
 const $=s=>document.querySelector(s);
@@ -215,34 +215,34 @@ function commit(msg){saveLocal();closeModal();render();if(msg)toast(msg)}
 const hayDatos=()=>COLS.some(c=>Object.keys(S[c]).length);
 const hayEjemplos=()=>COLS.some(c=>Object.values(S[c]).some(x=>x.ejemplo));
 
-/* ---------- Acceso por código firmado (igual que Libro del Negocio) ---------- */
+/* ---------- Licencia por teléfono (mismo sistema que Mi Tambo y Libro del Negocio) ---------- */
+const LSG=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){return null}};
 let pubKey=null;
 function b64uToBytes(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";const bin=atob(s);return Uint8Array.from(bin,c=>c.charCodeAt(0))}
-async function verificar(code){
-  try{
-    code=String(code||"").replace(/\s+/g,"");
-    const k=code.lastIndexOf("#");if(k>=0)code=code.slice(k+1);
-    const [p,s]=code.split(".");if(!p||!s)return null;
+function devId(){let d=LSG("gp_dev");if(!d||!/^[A-Z0-9]{8}$/.test(d)){const A="ABCDEFGHJKMNPQRSTUVWXYZ23456789",r=crypto.getRandomValues(new Uint8Array(8));d=[...r].map(x=>A[x%A.length]).join("");LSG("gp_dev",d)}return d}
+const devFmt=d=>d.slice(0,4)+"-"+d.slice(4);
+function fechaRef(){const t=hoy(),seen=LSG("gp_seen")||"";if(seen>t)return seen;LSG("gp_seen",t);return t}
+async function licCheck(code){
+  try{code=String(code||"").replace(/\s+/g,"");const k=code.lastIndexOf("#");if(k>=0)code=code.slice(k+1);
+    const [p,sg]=code.split(".");if(!p||!sg)return{st:"bad"};
     pubKey=pubKey||await crypto.subtle.importKey("jwk",{...PUB,ext:true},{name:"ECDSA",namedCurve:"P-256"},false,["verify"]);
-    const ok=await crypto.subtle.verify({name:"ECDSA",hash:"SHA-256"},pubKey,b64uToBytes(s),new TextEncoder().encode(p));
-    if(!ok)return null;
-    const j=JSON.parse(new TextDecoder().decode(b64uToBytes(p)));
-    if(!j||!/^\d{4}-\d{2}-\d{2}$/.test(j.e||""))return null;
-    if(j.a!=="porcina")return null;
-    return {n:j.n||"",e:j.e,i:j.i||"",code};
-  }catch(e){return null}
-}
-function leerLic(){try{return JSON.parse(localStorage.getItem(LIC_KEY)||"null")}catch(e){return null}}
-function guardarLic(l){try{localStorage.setItem(LIC_KEY,JSON.stringify(l))}catch(e){}}
-function fechaRef(){const l=leerLic(),h=hoy();return l&&l.visto&&l.visto>h?l.visto:h}
-function vigente(l){return !!(l&&l.e&&l.e>=fechaRef())}
-function activar(p){
-  const prev=leerLic()||{};
-  guardarLic({n:p.n,e:p.e,i:p.i,code:p.code,visto:prev.visto&&prev.visto>hoy()?prev.visto:hoy()});
-  S.lic=p;
-  if(p.n&&S.cfg.granja===DEF_CFG.granja){S.cfg.granja=p.n;saveLocal()}
-  S.gate=vigente(p)?"ok":"vencido";
-}
+    if(!await crypto.subtle.verify({name:"ECDSA",hash:"SHA-256"},pubKey,b64uToBytes(sg),new TextEncoder().encode(p)))return{st:"bad"};
+    const d=JSON.parse(new TextDecoder().decode(b64uToBytes(p)));
+    if(d.a!=="porcina")return{st:"bad"};
+    if(d.d!==devId())return{st:"dev",n:d.n};
+    const t=fechaRef();if(d.e&&t>d.e)return{st:"exp",n:d.n,e:d.e,code};
+    return{st:"ok",n:d.n||"",e:d.e||"",code}}
+  catch(e){return{st:"bad"}}}
+function leerCode(){const c=LSG(LIC_KEY);if(!c)return null;try{const j=JSON.parse(c);return j&&j.code?j.code:null}catch(e){return c}}
+async function licInit(){const c=leerCode();S.lic=c?await licCheck(c):{st:"none"};S.gate=S.lic.st==="ok"?"ok":S.lic.st==="exp"?"vencido":"sin"}
+function licMsg(r){return r.st==="dev"?"Este código fue generado para otro teléfono. Enviá el ID que aparece en tu pantalla.":r.st==="exp"?"Este código ya venció ("+fl(r.e)+"). Pedí uno nuevo.":"Código no válido. Revisá que lo pegaste completo."}
+function pedirCodigo(){const id=devFmt(devId());location.href="https://wa.me/?text="+encodeURIComponent("Hola, solicito el código de activación de Mi Granja Porcina. Mi ID es: "+id)}
+function copiarId(){const id=devFmt(devId());try{navigator.clipboard.writeText(id).then(()=>toast("ID copiado"),()=>toast("Tu ID es "+id))}catch(e){toast("Tu ID es "+id)}}
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const STANDALONE=window.navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);
+function avisoSafari(){return PROPIA&&IOS&&!STANDALONE?`<div class="notice" style="margin-top:0;margin-bottom:14px"><b>Estás usando la app dentro de Safari.</b> Para usarla como app: tocá Compartir → <b>Agregar a pantalla de inicio</b> y abrila desde el ícono. Activala desde el ícono: lo que actives aquí no pasa a la app instalada.</div>`:""}
+function idCard(){return `<div class="panel" style="display:grid;gap:10px"><div class="muted small" style="font-weight:600;letter-spacing:.06em;text-transform:uppercase">ID de este teléfono</div><div class="num" style="font-size:30px;letter-spacing:.06em">${devFmt(devId())}</div>
+  <div class="row"><button class="btn pri" data-act="pedirCodigo">Pedir código por WhatsApp</button><button class="btn" data-act="copiarId">Copiar ID</button></div></div>`}
 
 /* ---------- Reproducción ---------- */
 const cerdas=()=>Object.values(S.rep).filter(r=>r.estado!=="baja"&&r.tipo!=="Verraco").sort((a,b)=>a.tag.localeCompare(b.tag,"es",{numeric:true}));
@@ -350,20 +350,18 @@ function avisos(){
 function renderGate(){
   $("#nav").hidden=true;$("#fab").hidden=true;$("#gear").hidden=true;
   $("#brand").innerHTML="Mi Granja Porcina<small>Cría y engorde</small>";
-  const l=S.lic||leerLic();let msg;
-  if(S.gate==="cargando")msg=`<p class="muted">Verificando acceso…</p>`;
-  else if(S.gate==="vencido")msg=`<p>Tu acceso venció el <b>${esc(fl(l.e))}</b>. Tus datos siguen guardados en este teléfono. Ingresá un código nuevo para seguir usando la app.</p>`;
-  else msg=`<p>Para usar la app necesitás un código de acceso. Si te enviaron un <b>enlace de invitación</b>, abrilo y la app se activa sola. Si te enviaron un código, pegalo aquí.</p>`;
+  const l=S.lic||{};
+  const msg=S.gate==="vencido"?`Tu acceso venció el <b>${esc(fl(l.e))}</b>. Tus datos siguen guardados en este teléfono. Pedí la renovación enviando tu ID.`:`Para usar la app necesitás un código de activación. Enviá tu ID a quien te dio la app y pegá aquí el código que te devuelva.`;
   $("#main").innerHTML=`<svg class="gate-logo" viewBox="0 0 200 200" role="img" aria-label="Mi Granja Porcina">${SELLO}</svg>
-  <h2 style="margin-top:8px">${S.gate==="vencido"?"Acceso vencido":"Activá tu acceso"}</h2>
-  <div class="panel">${msg}
-  ${S.gate==="cargando"?"":`<form class="f" id="fCode" style="margin-top:12px">
-    <label for="codeIn">Código de acceso o enlace de invitación</label><textarea id="codeIn" rows="3" placeholder="Pegá aquí el código" autocomplete="off" spellcheck="false"></textarea>
+  ${avisoSafari()}<h2 style="margin-top:8px">${S.gate==="vencido"?"Acceso vencido":"Activá tu acceso"}</h2>
+  ${S.gate==="cargando"?`<p class="muted">Verificando acceso…</p>`:`<p style="margin:0 0 12px">${msg}</p>${idCard()}
+  <h3>Código de activación</h3>
+  <form class="f panel" id="fCode">
+    <label for="codeIn">Pegá aquí el código que te enviaron</label><textarea id="codeIn" rows="3" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
     <div id="codeMsg"></div>
-    <div class="actions"><button class="btn pri" type="submit">Activar</button></div></form>`}
-  </div>
+    <div class="actions"><button class="btn pri" type="submit">Activar</button></div></form>
   ${S.gate==="vencido"&&hayDatos()?`<h3>Tus datos</h3><div class="panel spread"><span style="font-size:14px">Podés descargar un respaldo aunque el acceso esté vencido.</span><button class="btn sm" data-act="respaldo">Descargar respaldo</button></div>`:""}
-  <p class="muted small" style="margin-top:16px">¿No tenés código? Pedíselo a quien te compartió la app.</p>`;
+  <p class="muted small" style="margin-top:16px">Importante: abrí la app desde el ícono instalado en tu pantalla de inicio antes de enviar tu ID. El código solo funciona en este teléfono.</p>`}`;
 }
 
 /* ---------- Vistas ---------- */
@@ -517,7 +515,8 @@ function vAjustes(){
   </form>
   <h3>Tu acceso</h3>
   <div class="panel" style="display:grid;gap:10px">
-    ${S.lic&&S.lic.owner?`<div style="font-size:15px">Sos el propietario de esta app. Los códigos para otros usuarios se crean en tu Generador de Claves.</div>`:S.lic?`<div class="facts" style="margin:0"><div><span>A nombre de</span><span>${esc(S.lic.n||"—")}</span></div><div><span>Vence</span><span>${esc(fl(S.lic.e))}</span></div></div>
+    ${S.lic&&S.lic.owner?`<div style="font-size:15px">Sos el propietario de esta app. Los códigos para otros usuarios se crean en el Admin de códigos.</div>`:S.lic?`<div class="facts" style="margin:0"><div><span>A nombre de</span><span>${esc(S.lic.n||"—")}</span></div><div><span>Vence</span><span>${S.lic.e?esc(fl(S.lic.e)):"Sin vencimiento"}</span></div><div><span>ID del teléfono</span><span class="num">${devFmt(devId())}</span></div></div>
+    <div class="row"><button class="btn sm" data-act="pedirCodigo">Pedir renovación por WhatsApp</button></div>
     <form class="f" id="fCode"><label for="codeIn">Cargar código nuevo (renovación)</label><textarea id="codeIn" rows="2" autocomplete="off" spellcheck="false"></textarea><div id="codeMsg"></div><div class="actions"><button class="btn" type="submit">Activar código</button></div></form>`:""}
   </div>
   <h3>Respaldo de tus datos</h3>
@@ -760,6 +759,8 @@ document.addEventListener("click",ev=>{
     case "nuevoIng":formFin(null,"ingreso");break;
     case "editFin":formFin(S.fin[id]);break;
     case "csv":exportCsv();break;
+    case "pedirCodigo":pedirCodigo();break;
+    case "copiarId":copiarId();break;
     case "respaldo":{const h=hoy();guardarArchivo("respaldo-granja-"+h+".json",JSON.stringify({app:"granja-porcina",v:1,fecha:h,data:snapshot()}),()=>{S.cfg.ultimoRespaldo=h;saveLocal();render();toast("Respaldo listo")});break}
     case "borrarEj":if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Tocá de nuevo para borrar";break}
       COLS.forEach(c=>Object.values(S[c]).forEach(x=>{if(x.ejemplo)delete S[c][x.id]}));Object.values(S.movs).forEach(m=>{if(m.loteId&&!S.lotes[m.loteId]||m.repId&&!S.rep[m.repId])delete S.movs[m.id]});
@@ -773,10 +774,11 @@ document.addEventListener("change",ev=>{
 });
 document.addEventListener("submit",async ev=>{
   if(ev.target.id==="fCode"){ev.preventDefault();
-    const p=await verificar($("#codeIn").value);
-    if(!p){$("#codeMsg").innerHTML=`<div class="notice" style="margin:0"><b>Código no válido.</b> Revisá que lo copiaste completo, sin espacios ni letras de más.</div>`;return}
-    if(p.e<fechaRef()){$("#codeMsg").innerHTML=`<div class="notice" style="margin:0"><b>Este código ya venció</b> el ${esc(fl(p.e))}. Pedí uno nuevo.</div>`;return}
-    activar(p);render();toast("Acceso activo hasta el "+fl(p.e));return}
+    const r=await licCheck($("#codeIn").value);
+    if(r.st!=="ok"){$("#codeMsg").innerHTML=`<div class="notice" style="margin:0">${esc(licMsg(r))}</div>`;return}
+    LSG(LIC_KEY,r.code);S.lic=r;S.gate="ok";
+    if(r.n&&S.cfg.granja===DEF_CFG.granja){S.cfg.granja=r.n;saveLocal()}
+    render();toast(r.e?"Acceso activo hasta el "+fl(r.e):"Acceso activado");return}
   if(ev.target.id==="fRest"){ev.preventDefault();
     const d=leerRespaldo($("#rTxt").value);
     if(!d){$("#rMsg").innerHTML=`<div class="notice" style="margin:0"><b>No es un respaldo válido.</b> Elegí el archivo .json que descargaste de esta app.</div>`;return}
@@ -842,18 +844,13 @@ if(!tenia)sembrar();
 render();
 (async()=>{
   const cl=window.claude;
-  const l0=leerLic();if(l0&&(!l0.visto||l0.visto<hoy())){l0.visto=hoy();guardarLic(l0)}
-  const h=(location.hash||"").slice(1);
-  if(h){const p=await verificar(h);if(p&&p.e>=fechaRef()){const cur=leerLic();if(!cur||cur.code!==p.code)activar(p)}}
-  const l=leerLic();
-  if(l){S.lic=l;S.gate=vigente(l)?"ok":"vencido";render()}
+  await licInit();render();
   if(cl){
     cl.use("downloads").then(d=>{downloads=d}).catch(()=>{});
     let owner=false;
     try{const u=await cl.use("user");owner=!!(u&&await u.isOwner())}catch(e){}
     if(owner){S.lic={owner:true,n:"Propietario"};S.gate="ok"}
   }
-  if(!l&&S.gate==="cargando")S.gate="sin";
   render();
 })();
 })();

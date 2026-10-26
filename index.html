@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#9C2F52">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -142,6 +142,49 @@ form.f{display:grid;gap:12px}
 .sello-cerdo{animation:mece 3s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.sello-cerdo{animation:none}}
 @media (prefers-reduced-motion:no-preference){.sheet{animation:up .18s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}}
+html,body{overflow-x:clip}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.mh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px 0 10px}
+.mh h2{margin:0;min-width:0}
+.pdfb{display:inline-flex;align-items:center;gap:6px;flex-shrink:0}
+.pdfb svg,.pdfic svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.pdfic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);flex-shrink:0}
+.pdfic svg{width:18px;height:18px}
+.item .chev{font-size:22px;color:var(--muted)}
+.acc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-top:10px;overflow:hidden}
+.acc .ah{display:flex;align-items:center;gap:12px;width:100%;min-height:54px;padding:10px 14px;background:transparent;border:0;text-align:left;color:var(--ink)}
+.acc .ah:hover{background:var(--sunk)}
+.acc .at{flex:1;min-width:0}
+.acc .at b{display:block;font-size:16px;font-weight:600}
+.acc .at small{display:block;color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc .chev{font-size:24px;line-height:1;color:var(--muted);transition:transform .15s;flex-shrink:0}
+.acc .ab{display:none;padding:12px 14px 14px;border-top:1px solid var(--line)}
+.acc.op .ab{display:block}
+.acc.op>.ah .chev{transform:rotate(90deg)}
+.acc .ab>.list{border:0;border-radius:0;margin:0 -14px -14px}
+.acc .ab>.list:first-child{margin-top:-12px}
+.acc .ab>*+.list{border-top:1px solid var(--line);margin-top:12px}
+.sheet .acc{margin-top:14px}
+@media (prefers-reduced-motion:reduce){.acc .chev{transition:none}}
+.addrow{display:flex;gap:8px;align-items:center}
+.addrow input{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px;color:var(--ink)}
+.addrow .btn{flex-shrink:0}
+.addrow[hidden]{display:none}
+.choice{display:grid;gap:10px;margin-bottom:6px}
+.choice button{display:grid;gap:2px;text-align:left;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--ink)}
+.choice button:hover{border-color:var(--accent)}
+.choice b{font-size:16px}.choice span{font-size:13px;color:var(--muted)}
+#pdfv{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:color-mix(in srgb,var(--bg) 92%,#000)}
+body.pv-on{overflow:hidden}
+.pv-top{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px));background:var(--surface);border-bottom:1px solid var(--line)}
+.pv-x{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:600;font-size:14px;flex:none}
+.pv-t{min-width:0;display:grid}.pv-t b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pv-t small{font-size:12px;color:var(--muted)}
+.pv-body{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:14px 12px 20px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pv-page{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:10px}
+.pv-page canvas{border-radius:6px;box-shadow:0 2px 0 #0002,0 10px 24px -10px #000a;background:#fff;max-width:100%}
+.pv-page span{font-size:11.5px;color:var(--muted)}
+.pv-bar{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:10px max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));background:var(--surface);border-top:1px solid var(--line)}
+.pv-bar .btn{flex:1;min-width:140px;padding:12px 14px;font-size:15px}
 </style>
 </head>
 <body>
@@ -176,7 +219,7 @@ const INGRESOS=["Venta de cerdos de engorde","Venta de lechones","Venta de repro
 const CENTROS=["Cría","Engorde","General"];
 const MESES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const COLS=["rep","lotes","eventos","movs","fin"];
-const DEF_CFG={granja:"Mi Granja Porcina",moneda:"C$",gest:114,lact:21};
+const DEF_CFG={granja:"Mi Granja Porcina",moneda:"C$",gest:114,lact:21,prop:"",tel:"",dir:"",razas:[]};
 const LS_KEY="granja-porcina-v1";
 const LIC_KEY="granja-porcina-licencia";
 const PUB={"kty": "EC", "crv": "P-256", "x": "yXJlQaNsBkNe0ieFiwq0FOQp0Y4UZ9MzKSCBEe3kJ9o", "y": "YLsPvu5_Yp6jU1BSMOp3EJDUKlAVklUtsz4ApXODPlU"};
@@ -335,7 +378,7 @@ function render(){
   $("#brand").innerHTML=esc(S.cfg.granja||"Mi Granja Porcina")+"<small>Cría y engorde</small>";
   const na=alertas().filter(a=>a.urg).length;
   $("#tabs").innerHTML=TABS.map(([k,l,ic])=>`<button data-act="tab" data-k="${k}" class="${S.tab===k?"on":""}" aria-label="${l}"><svg viewBox="0 0 24 24">${ic}</svg>${l}${k==="cerdas"&&na?`<span class="badge">${na}</span>`:""}</button>`).join("");
-  const fabs={inicio:["+ Evento de cerda","nuevoEv"],cerdas:["+ Evento de cerda","nuevoEv"],inventario:S.invTab==="rep"?["+ Reproductor","nuevoRep"]:["+ Movimiento","nuevoMov"],costos:["+ Gasto","nuevoGasto"],resultados:["+ Ingreso","nuevoIng"]};
+  const fabs={inicio:["+ Evento de cerda","nuevoEv"],cerdas:["+ Evento de cerda","nuevoEv"],inventario:["+ Agregar","agregarInv"],costos:["+ Gasto","nuevoGasto"],resultados:["+ Ingreso","nuevoIng"]};
   const f=fabs[S.tab],fab=$("#fab");fab.hidden=!f;if(f){fab.textContent=f[0];fab.dataset.act=f[1]}
   const v={inicio:vInicio,cerdas:vCerdas,inventario:vInventario,costos:vCostos,resultados:vResultados,ajustes:vAjustes}[S.tab];
   $("#main").innerHTML=v()+avisos();
@@ -365,119 +408,134 @@ function renderGate(){
 }
 
 /* ---------- Vistas ---------- */
+/* Secciones que se abren y cierran (se recuerdan en este teléfono) */
+const DEF_OPEN=["ini-pend","cer-pend","inv-lotes","cos-rubro","res-er","aj-granja"];
+let AB;try{AB=new Set(JSON.parse(localStorage.getItem("gp_open")||"null")||DEF_OPEN)}catch(e){AB=new Set(DEF_OPEN)}
+function sec(k,tit,sub,body,o={}){const op=AB.has(k);
+  return `<section class="acc ${op?"op":""}"><button class="ah" data-act="sec" data-k="${k}" aria-expanded="${op}"><span class="at"><b>${tit}</b><small>${o.alerta?`<span class="chip bad">${esc(o.alerta)}</span> `:""}${sub||""}</small></span><span class="chev" aria-hidden="true">›</span></button><div class="ab">${body}</div></section>`}
+function toggleSec(b){const k=b.dataset.k,on=!AB.has(k);on?AB.add(k):AB.delete(k);try{localStorage.setItem("gp_open",JSON.stringify([...AB]))}catch(e){}
+  const s=b.closest(".acc");if(s)s.classList.toggle("op",on);b.setAttribute("aria-expanded",on)}
+const IC_PDF='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></svg>';
+const pdfBtn=k=>`<button class="btn sm pdfb" data-act="pdf" data-k="${k}">${IC_PDF}PDF</button>`;
+const head=(t,k)=>`<div class="mh"><h2>${t}</h2>${k?pdfBtn(k):""}</div>`;
+const plural=(n,s,p)=>n+" "+(n===1?s:(p||s+"s"));
+const PDFS=[["resultados","Estado de resultados","Período de la pestaña Resultados"],["costos","Estructura de costos","Período de la pestaña Costos"],["inventario","Inventario de animales","Al día de hoy"],["prenez","Preñez y partos","Estado de cada cerda y pendientes"]];
+function pdfMenu(){return `<div class="list">${PDFS.map(([k,t,s])=>`<button class="item" data-act="pdf" data-k="${k}"><span class="pdfic">${IC_PDF}</span><div class="main"><div class="t">${t}</div><div class="s">${k==="resultados"||k==="costos"?esc(perLbl()):s}</div></div><span class="chev" aria-hidden="true">›</span></button>`).join("")}</div>`}
+
 function stagesHtml(inv){
   const items=[["Cerdas","Madres y primerizas"],["Verracos","Padrotes"],...ETAPAS.map(e=>[e,ETAPA_TXT[e]])];
   return `<div class="stages">${items.map(([k,s])=>`<div class="stage"><div class="l">${k}</div><div class="v">${inv[k]||0}</div><div class="s">${s}</div></div>`).join("")}</div>`;
 }
 function vInicio(){
-  const AL=alertas(),inv=inventario(),r=resultado({modo:"mes",mes:hoy().slice(0,7)});
+  const AL=alertas(),inv=inventario(),mes=hoy().slice(0,7),r=resultado({modo:"mes",mes:mes});
   const n={};cerdas().forEach(c=>{const s=estadoCerda(c).st;n[s]=(n[s]||0)+1});
+  const urg=AL.filter(a=>a.urg).length;
   return `${hayEjemplos()?`<div class="notice"><b>Datos de ejemplo.</b> Lo que ves es para mostrar cómo funciona la app. Borralo en Ajustes cuando empieces a registrar tu granja.</div>`:""}
-  <h2>Hoy en la granja</h2>
+  ${head("Hoy en la granja")}
   <div class="kpis k4">
     <div class="kpi"><div class="l">Cabezas</div><div class="v big">${inv.total}</div></div>
     <div class="kpi"><div class="l">Preñadas</div><div class="v big">${(n["preñada"]||0)+(n.servida||0)}</div></div>
     <div class="kpi"><div class="l">Lactando</div><div class="v big">${n.lactando||0}</div></div>
     <div class="kpi"><div class="l">Engorde</div><div class="v big">${inv.Engorde}</div></div>
   </div>
-  <h3>Pendientes de las cerdas</h3>
-  ${AL.length?alHtml(AL.slice(0,6))+(AL.length>6?`<div style="margin-top:8px"><button class="btn sm" data-act="tab" data-k="cerdas">Ver las ${AL.length}</button></div>`:""):`<div class="list"><div class="empty">Nada pendiente para los próximos días.</div></div>`}
-  <h3>Inventario por etapa</h3>${stagesHtml(inv)}
-  <h3>${esc(mesLbl(hoy().slice(0,7)))}</h3>
-  <div class="kpis">
+  ${sec("ini-pend","Pendientes de las cerdas",AL.length?plural(AL.length,"pendiente")+" · próximo: "+esc(AL[0].t.toLowerCase()):"Nada pendiente en los próximos días",AL.length?alHtml(AL):`<div class="empty">Nada pendiente en los próximos días.</div>`,{alerta:urg?plural(urg,"urgente"):""})}
+  ${sec("ini-etapas","Inventario por etapa",inv.total+" cabezas · "+inv.Engorde+" en engorde",stagesHtml(inv))}
+  ${sec("ini-mes","Resultado de "+esc(mesLbl(mes)),"Utilidad "+M0(r.un),`<div class="kpis">
     <div class="kpi"><div class="l">Ingresos</div><div class="v in-c">${M0(r.I)}</div></div>
     <div class="kpi"><div class="l">Costos</div><div class="v out-c">${M0(r.V+r.F)}</div></div>
-    <div class="kpi"><div class="l">Utilidad</div><div class="v ${r.un>=0?"in-c":"out-c"}">${M0(r.un)}</div></div>
-  </div>`;
+    <div class="kpi"><div class="l">Utilidad</div><div class="v ${r.un>=0?"in-c":"out-c"}">${M0(r.un)}</div></div></div>`)}
+  ${sec("ini-pdf","Reportes en PDF","Ver, guardar o compartir",pdfMenu())}`;
 }
 function vCerdas(){
   const C=cerdas().map(c=>({c,s:estadoCerda(c)})),n=k=>C.filter(x=>x.s.st===k).length;
-  const AL=alertas(),I=indicadores();
+  const AL=alertas(),I=indicadores(),urg=AL.filter(a=>a.urg).length;
   const orden={lactando:0,"preñada":1,servida:2,destetada:3,vacia:4};
   C.sort((a,b)=>orden[a.s.st]-orden[b.s.st]||(a.s.due||"").localeCompare(b.s.due||""));
-  return `<h2>Preñez y partos</h2>
+  return `${head("Preñez y partos","prenez")}
   <div class="kpis k4">
     <div class="kpi"><div class="l">Preñadas</div><div class="v big">${n("preñada")}</div></div>
     <div class="kpi"><div class="l">Servidas</div><div class="v big">${n("servida")}</div></div>
     <div class="kpi"><div class="l">Lactando</div><div class="v big">${n("lactando")}</div></div>
     <div class="kpi"><div class="l">Vacías</div><div class="v big">${n("vacia")+n("destetada")}</div></div>
   </div>
-  ${AL.length?`<h3>Pendientes (${AL.length})</h3>${alHtml(AL)}`:""}
-  <h3>Cerdas (${C.length})</h3>
-  <div class="list">${C.length?C.map(({c,s})=>`<button class="item" data-act="verCerda" data-id="${c.id}"><span class="tagno">${esc(c.tag)}</span><div class="main"><div class="t">${esc(c.nombre||c.tipo)}${c.tipo==="Primeriza"?' <span class="chip neu">Primeriza</span>':""}${c.ejemplo?' <span class="chip neu">Ejemplo</span>':""}</div><div class="s">${esc(detalle(s))}</div></div><span class="chip ${ST[s.st][1]}">${ST[s.st][0]}</span></button>`).join(""):`<div class="empty">Todavía no hay cerdas. Agregalas en Inventario → Reproductores.</div>`}</div>
-  <h3>Indicadores de los últimos 12 meses</h3>
-  <div class="panel"><div class="facts" style="margin:0">
+  ${sec("cer-pend","Pendientes",AL.length?plural(AL.length,"pendiente")+" · próximo: "+esc(AL[0].t.toLowerCase()):"Nada pendiente en los próximos días",AL.length?alHtml(AL):`<div class="empty">Nada pendiente en los próximos días.</div>`,{alerta:urg?plural(urg,"urgente"):""})}
+  ${sec("cer-lista","Cerdas ("+C.length+")",C.length?plural(n("preñada")+n("servida"),"preñada")+" · "+n("lactando")+" lactando · "+plural(n("vacia")+n("destetada"),"vacía"):"Sin cerdas cargadas",`<div class="list">${C.length?C.map(({c,s})=>`<button class="item" data-act="verCerda" data-id="${c.id}"><span class="tagno">${esc(c.tag)}</span><div class="main"><div class="t">${esc(c.nombre||c.tipo)}${c.tipo==="Primeriza"?' <span class="chip neu">Primeriza</span>':""}${c.ejemplo?' <span class="chip neu">Ejemplo</span>':""}</div><div class="s">${esc(detalle(s))}</div></div><span class="chip ${ST[s.st][1]}">${ST[s.st][0]}</span></button>`).join(""):`<div class="empty">Todavía no hay cerdas. Agregalas en Inventario → + Agregar → Nuevo reproductor.</div>`}</div>`)}
+  ${sec("cer-ind","Indicadores de 12 meses",plural(I.partos,"parto")+" · "+nf1.format(I.pv)+" nacidos vivos por parto",`<div class="facts" style="margin:0">
     <div><span>Partos</span><span class="num">${I.partos}</span></div>
     <div><span>Partos por cerda</span><span class="num">${nf1.format(I.ppa)}</span></div>
     <div><span>Nacidos totales por parto</span><span class="num">${nf1.format(I.pt)}</span></div>
     <div><span>Nacidos vivos por parto</span><span class="num">${nf1.format(I.pv)}</span></div>
     <div><span>Destetados por camada</span><span class="num">${nf1.format(I.pd)}</span></div>
     <div><span>Mortalidad en lactancia</span><span class="num">${I.mort==null?"—":nf1.format(I.mort)+" %"}</span></div>
-  </div><div class="muted small" style="margin-top:8px">Gestación de ${S.cfg.gest} días (3 meses, 3 semanas, 3 días). Lactancia de ${S.cfg.lact} días. Podés cambiarlos en Ajustes.</div></div>`;
+  </div><div class="muted small" style="margin-top:8px">Gestación de ${S.cfg.gest} días (3 meses, 3 semanas, 3 días). Lactancia de ${S.cfg.lact} días. Podés cambiarlos en Ajustes.</div>`)}`;
 }
 function vInventario(){
-  const inv=inventario();
-  let body="";
-  if(S.invTab==="lotes"){const L=lotesAct();
-    body=`<div class="list">${L.length?L.map(l=>`<button class="item" data-act="verLote" data-id="${l.id}"><div class="main"><div class="t">${esc(l.nombre)}${l.ejemplo?' <span class="chip neu">Ejemplo</span>':""}</div><div class="s">${dias(l.inicio,hoy())} días desde ${l.etapa==="Lactancia"?"el parto":"el ingreso"}${l.peso?" · "+nf1.format(l.peso)+" kg prom.":""}</div></div><span class="chip ${l.etapa==="Engorde"?"acc":l.etapa==="Lactancia"?"ok":"neu"}">${l.etapa}</span><span class="num" style="min-width:44px;text-align:right">${l.cabezas} <span class="muted small">cab</span></span></button>`).join(""):`<div class="empty">No hay lotes. Los partos crean la camada sola; también podés registrar una compra con “+ Movimiento”.</div>`}</div>`}
-  else if(S.invTab==="rep"){const R=Object.values(S.rep).filter(r=>r.estado!=="baja").sort((a,b)=>TIPOS_REP.indexOf(a.tipo)-TIPOS_REP.indexOf(b.tipo)||a.tag.localeCompare(b.tag,"es",{numeric:true}));
-    const B=Object.values(S.rep).filter(r=>r.estado==="baja");
-    body=`<div class="list">${R.length?R.map(r=>`<button class="item" data-act="${r.tipo==="Verraco"?"editRep":"verCerda"}" data-id="${r.id}"><span class="tagno">${esc(r.tag)}</span><div class="main"><div class="t">${esc(r.nombre||r.tipo)}${r.ejemplo?' <span class="chip neu">Ejemplo</span>':""}</div><div class="s">${esc(r.tipo)}${r.raza?" · "+esc(r.raza):""}${r.nac?" · "+Math.floor(dias(r.nac,hoy())/30.4)+" meses":""}</div></div></button>`).join(""):`<div class="empty">Agregá tus cerdas, primerizas y verracos con “+ Reproductor”.</div>`}</div>
-    ${B.length?`<h3>Dados de baja (${B.length})</h3><div class="list">${B.map(r=>`<button class="item" data-act="editRep" data-id="${r.id}"><span class="tagno">${esc(r.tag)}</span><div class="main"><div class="t">${esc(r.nombre||r.tipo)}</div><div class="s">${esc(r.bajaMotivo||"Baja")} · ${fl(r.bajaFecha)}</div></div></button>`).join("")}</div>`:""}`}
-  else{const L=Object.values(S.movs).sort((a,b)=>(b.fecha+b.creado).localeCompare(a.fecha+a.creado)).slice(0,60);
-    body=`<div class="list">${L.length?L.map(movRow).join(""):`<div class="empty">Sin movimientos todavía.</div>`}</div>`}
-  return `<h2>Inventario</h2>
-  <div class="panel spread" style="margin-bottom:10px"><div><div class="muted small" style="font-weight:600;letter-spacing:.06em;text-transform:uppercase">Total de animales</div><div class="num" style="font-size:30px">${inv.total}</div></div><div class="muted small" style="text-align:right">${lotesAct().length} lotes<br>${cerdas().length+verracos().length} reproductores</div></div>
-  ${stagesHtml(inv)}
-  <div style="margin:16px 0 10px"><div class="seg">${[["lotes","Lotes"],["rep","Reproductores"],["movs","Movimientos"]].map(([k,l])=>`<button data-act="invT" data-k="${k}" class="${S.invTab===k?"on":""}">${l}</button>`).join("")}</div></div>
-  ${body}`;
+  const inv=inventario(),L=lotesAct();
+  const R=Object.values(S.rep).filter(r=>r.estado!=="baja").sort((a,b)=>TIPOS_REP.indexOf(a.tipo)-TIPOS_REP.indexOf(b.tipo)||a.tag.localeCompare(b.tag,"es",{numeric:true}));
+  const B=Object.values(S.rep).filter(r=>r.estado==="baja");
+  const MV=Object.values(S.movs).sort((a,b)=>(b.fecha+b.creado).localeCompare(a.fecha+a.creado)).slice(0,60);
+  const cabL=L.reduce((a,l)=>a+(+l.cabezas||0),0);
+  return `${head("Inventario","inventario")}
+  <div class="kpis k4">
+    <div class="kpi"><div class="l">Total</div><div class="v big">${inv.total}</div></div>
+    <div class="kpi"><div class="l">Reproductores</div><div class="v big">${R.length}</div></div>
+    <div class="kpi"><div class="l">Lotes</div><div class="v big">${L.length}</div></div>
+    <div class="kpi"><div class="l">Engorde</div><div class="v big">${inv.Engorde}</div></div>
+  </div>
+  ${sec("inv-etapas","Por etapa","Lactancia "+inv.Lactancia+" · Inicio "+inv.Inicio+" · Desarrollo "+inv.Desarrollo+" · Engorde "+inv.Engorde,stagesHtml(inv))}
+  ${sec("inv-lotes","Lotes ("+L.length+")",plural(cabL,"cabeza")+" en lotes",`<div class="list">${L.length?L.map(l=>`<button class="item" data-act="verLote" data-id="${l.id}"><div class="main"><div class="t">${esc(l.nombre)}${l.ejemplo?' <span class="chip neu">Ejemplo</span>':""}</div><div class="s">${dias(l.inicio,hoy())} días desde ${l.etapa==="Lactancia"?"el parto":"el ingreso"}${l.peso?" · "+nf1.format(l.peso)+" kg prom.":""}</div></div><span class="chip ${l.etapa==="Engorde"?"acc":l.etapa==="Lactancia"?"ok":"neu"}">${l.etapa}</span><span class="num" style="min-width:44px;text-align:right">${l.cabezas} <span class="muted small">cab</span></span></button>`).join(""):`<div class="empty">No hay lotes. Los partos crean la camada sola; también podés registrar una compra con “+ Agregar”.</div>`}</div>`)}
+  ${sec("inv-rep","Reproductores ("+R.length+")",plural(R.filter(r=>r.tipo!=="Verraco").length,"cerda")+" · "+plural(R.filter(r=>r.tipo==="Verraco").length,"verraco"),`<div class="row"><button class="btn sm pri" data-act="nuevoRep">+ Nuevo reproductor</button></div>
+    <div class="list">${R.length?R.map(r=>`<button class="item" data-act="${r.tipo==="Verraco"?"editRep":"verCerda"}" data-id="${r.id}"><span class="tagno">${esc(r.tag)}</span><div class="main"><div class="t">${esc(r.nombre||r.tipo)}${r.ejemplo?' <span class="chip neu">Ejemplo</span>':""}</div><div class="s">${esc(r.tipo)}${r.raza?" · "+esc(r.raza):""}${r.nac?" · "+Math.floor(dias(r.nac,hoy())/30.4)+" meses":""}</div></div></button>`).join(""):`<div class="empty">Agregá tus cerdas, primerizas y verracos con “+ Nuevo reproductor”.</div>`}</div>`)}
+  ${B.length?sec("inv-bajas","Dados de baja ("+B.length+")","Vendidos, descartados o muertos",`<div class="list">${B.map(r=>`<button class="item" data-act="editRep" data-id="${r.id}"><span class="tagno">${esc(r.tag)}</span><div class="main"><div class="t">${esc(r.nombre||r.tipo)}</div><div class="s">${esc(r.bajaMotivo||"Baja")} · ${fl(r.bajaFecha)}</div></div></button>`).join("")}</div>`):""}
+  ${sec("inv-movs","Movimientos recientes",MV.length?"Último: "+esc(MV[0].tipo.toLowerCase())+" · "+fc(MV[0].fecha):"Sin movimientos todavía",`<div class="list">${MV.length?MV.map(movRow).join(""):`<div class="empty">Sin movimientos todavía.</div>`}</div>`)}`;
 }
 const MOVC={Nacimiento:"ok",Compra:"neu",Venta:"acc",Muerte:"bad",Traslado:"neu",Pesaje:"neu",Destete:"ok",Baja:"bad",Alta:"neu"};
+function movDet(m){return [m.cabezas?m.cabezas+" cab":"",m.kg?nf1.format(m.kg)+" kg":"",m.etapa?"a "+m.etapa:"",m.peso?nf1.format(m.peso)+" kg prom.":"",m.nota||""].filter(Boolean).join(" · ")}
+function movQuien(m){const l=m.loteId&&S.lotes[m.loteId],r=m.repId&&S.rep[m.repId];return l?l.nombre:r?("#"+r.tag+" "+(r.nombre||"")).trim():"(eliminado)"}
 function movRow(m){
-  const l=m.loteId&&S.lotes[m.loteId],r=m.repId&&S.rep[m.repId];
-  const quien=l?l.nombre:r?("#"+r.tag+" "+(r.nombre||"")):"(eliminado)";
-  const det=[m.cabezas?m.cabezas+" cab":"",m.kg?nf1.format(m.kg)+" kg":"",m.etapa?"→ "+m.etapa:"",m.peso?nf1.format(m.peso)+" kg prom.":"",m.nota||""].filter(Boolean).join(" · ");
-  return `<div class="item"><span class="chip ${MOVC[m.tipo]||"neu"}" style="min-width:84px;text-align:center">${m.tipo}</span><div class="main"><div class="t">${esc(quien)}</div><div class="s">${fl(m.fecha)}${det?" · "+esc(det):""}</div></div>${m.monto?`<span class="num ${m.tipo==="Venta"||m.tipo==="Baja"?"in-c":"out-c"}">${M0(m.monto)}</span>`:""}</div>`;
+  const det=movDet(m);
+  return `<div class="item"><span class="chip ${MOVC[m.tipo]||"neu"}" style="min-width:84px;text-align:center">${m.tipo}</span><div class="main"><div class="t">${esc(movQuien(m))}</div><div class="s">${fl(m.fecha)}${det?" · "+esc(det):""}</div></div>${m.monto?`<span class="num ${m.tipo==="Venta"||m.tipo==="Baja"?"in-c":"out-c"}">${M0(m.monto)}</span>`:""}</div>`;
 }
 function perNav(){
   return `<div class="pernav"><div class="seg">${[["mes","Mes"],["año","Año"]].map(([k,l])=>`<button data-act="perM" data-k="${k}" class="${S.per.modo===k?"on":""}">${l}</button>`).join("")}</div>
   <button class="icon" data-act="per" data-d="-1" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><span class="lbl">${esc(perLbl())}</span><button class="icon" data-act="per" data-d="1" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button></div>`;
 }
 function bars(rows,tot,color){const mx=rows.length?rows[0][1]:1;return `<div class="bars">${rows.map(([k,v])=>`<div class="bar"><span>${esc(k)}${color?` <span class="chip ${esFijo(k)?"neu":"warn"}">${esFijo(k)?"Fijo":"Variable"}</span>`:""}</span><span class="num">${M0(v)} <span class="muted small">${tot?nf1.format(v/tot*100)+"%":""}</span></span><div class="track"><div class="fill" style="width:${(v/mx*100).toFixed(1)}%"></div></div></div>`).join("")}</div>`}
-function vCostos(){
-  const r=resultado(),T=r.V+r.F,vt=ventasPer();
-  const dest=Object.values(S.eventos).filter(e=>e.tipo==="Destete"&&enPer(e.fecha)).reduce((a,e)=>a+(+e.destetados||0),0);
+function datosCostos(per){
+  const r=resultado(per),T=r.V+r.F,vt=ventasPer(per);
+  const dest=Object.values(S.eventos).filter(e=>e.tipo==="Destete"&&enPer(e.fecha,per)).reduce((a,e)=>a+(+e.destetados||0),0);
   const cen={};CENTROS.forEach(c=>cen[c]=0);r.gas.forEach(g=>cen[g.centro||"General"]+=(+g.monto||0));
   const alim=sum(r.gas.filter(g=>g.cat==="Alimento"),"monto");
   const cria=cen["Cría"]+cen.General*(cen["Cría"]/((cen["Cría"]+cen.Engorde)||1));
+  return {r,T,vt,dest,cen,alim,cria};
+}
+function vCostos(){
+  const {r,T,vt,dest,cen,alim,cria}=datosCostos();
   const L=[...r.gas].sort((a,b)=>(b.fecha+b.creado).localeCompare(a.fecha+a.creado));
-  return `<h2>Estructura de costos</h2>${perNav()}
+  const rub=agrupar(r.gas,"cat");
+  return `${head("Estructura de costos","costos")}${perNav()}
   <div class="panel"><div class="spread"><div><div class="muted small" style="font-weight:600;letter-spacing:.06em;text-transform:uppercase">Costo total</div><div class="num" style="font-size:28px">${M0(T)}</div></div><div class="small" style="text-align:right"><span style="color:var(--warn)">●</span> Variable ${M0(r.V)}<br><span class="muted">●</span> Fijo ${M0(r.F)}</div></div>
   <div class="split"><div style="width:${T?(r.V/T*100):0}%;background:var(--warn)"></div><div style="width:${T?(r.F/T*100):0}%;background:var(--muted)"></div></div>
   <div class="muted small">${T?nf1.format(r.V/T*100)+"% variable · "+nf1.format(r.F/T*100)+"% fijo":"Sin costos en el período"}</div></div>
-  <h3>Por centro de costo</h3>
-  <div class="kpis">${CENTROS.map(c=>`<div class="kpi"><div class="l">${c}</div><div class="v">${M0(cen[c])}</div></div>`).join("")}</div>
-  <h3>Por rubro</h3><div class="panel">${r.gas.length?bars(agrupar(r.gas,"cat"),T,true):`<div class="empty">Sin gastos en ${esc(perLbl())}.</div>`}</div>
-  <h3>Costos unitarios</h3>
-  <div class="panel"><div class="facts" style="margin:0">
+  ${sec("cos-centro","Por centro de costo","Cría "+M0(cen["Cría"])+" · Engorde "+M0(cen.Engorde)+" · General "+M0(cen.General),`<div class="kpis">${CENTROS.map(c=>`<div class="kpi"><div class="l">${c}</div><div class="v">${M0(cen[c])}</div></div>`).join("")}</div>`)}
+  ${sec("cos-rubro","Por rubro",rub.length?plural(rub.length,"rubro")+" · mayor: "+esc(rub[0][0]):"Sin gastos en "+esc(perLbl()),rub.length?bars(rub,T,true):`<div class="empty">Sin gastos en ${esc(perLbl())}.</div>`)}
+  ${sec("cos-unit","Costos unitarios",[dest?"Por lechón "+M0(cria/dest):"",vt.kg?"Por kg "+M(T/vt.kg):""].filter(Boolean).join(" · ")||"Sin destetes ni ventas en el período",`<div class="facts" style="margin:0">
     <div><span>Alimento sobre el total</span><span class="num">${T?nf1.format(alim/T*100)+" %":"—"}</span></div>
     <div><span>Lechones destetados</span><span class="num">${dest}</span></div>
     <div><span>Costo por lechón destetado</span><span class="num">${dest?M0(cria/dest):"—"}</span></div>
     <div><span>Kg vendidos</span><span class="num">${nf0.format(vt.kg)}</span></div>
     <div><span>Costo por kg vendido</span><span class="num">${vt.kg?M(T/vt.kg):"—"}</span></div>
     <div><span>Precio promedio por kg</span><span class="num">${vt.kg?M(vt.monto/vt.kg):"—"}</span></div>
-  </div><div class="muted small" style="margin-top:8px">El costo por lechón usa el centro Cría más su parte de los gastos generales. El costo por kg divide todos los costos del período entre los kg vendidos.</div></div>
-  <h3>Gastos del período</h3>
-  <div class="list">${L.length?L.map(finRow).join(""):`<div class="empty">Tocá “+ Gasto” para registrar alimento, medicinas, mano de obra y demás.</div>`}</div>`;
+  </div><div class="muted small" style="margin-top:8px">El costo por lechón usa el centro Cría más su parte de los gastos generales. El costo por kg divide todos los costos del período entre los kg vendidos.</div>`)}
+  ${sec("cos-gastos","Gastos del período ("+L.length+")",L.length?"Total "+M0(T):"Sin gastos registrados",`<div class="list">${L.length?L.map(finRow).join(""):`<div class="empty">Tocá “+ Gasto” para registrar alimento, medicinas, mano de obra y demás.</div>`}</div>`)}`;
 }
 function finRow(f){return `<button class="item" data-act="editFin" data-id="${f.id}"><div class="main"><div class="t">${esc(f.nota||f.cat)}${f.ejemplo?' <span class="chip neu">Ejemplo</span>':""}</div><div class="s">${fc(f.fecha)} · ${esc(f.cat)}${f.tipo==="gasto"?" · "+esc(f.centro||"General"):""}</div></div><span class="num ${f.tipo==="ingreso"?"in-c":"out-c"}">${f.tipo==="ingreso"?"+":"−"}${M0(f.monto)}</span></button>`}
+function seisMeses(){const base=S.per.modo==="mes"?S.per.mes:S.per.mes.slice(0,4)+"-12";const ms=[];for(let i=5;i>=0;i--)ms.push(addMes(base,-i));
+  return ms.map(m=>{const x=resultado({modo:"mes",mes:m});return {m,i:x.I,c:x.V+x.F,u:x.un}})}
 function vResultados(){
   const r=resultado(),vt=ventasPer(),pct=r.I?r.un/r.I*100:null;
   const lines=(rows)=>rows.map(([k,v])=>`<div class="ln sub"><span>${esc(k)}</span><span class="num">${M(v)}</span></div>`).join("");
-  // gráfico 6 meses
-  const base=S.per.modo==="mes"?S.per.mes:S.per.mes.slice(0,4)+"-12";
-  const ms=[];for(let i=5;i>=0;i--)ms.push(addMes(base,-i));
-  const data=ms.map(m=>{const x=resultado({modo:"mes",mes:m});return {m,i:x.I,c:x.V+x.F,u:x.un}});
+  const data=seisMeses();
   const mx=Math.max(1,...data.map(d=>Math.max(d.i,d.c)));
   const W=340,H=160,pl=6,pb=22,top=10,cw=(W-pl*2)/6,bw=Math.min(16,cw/3),ch=H-pb-top;
   let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Ingresos y costos de los últimos seis meses">`;
@@ -486,8 +544,13 @@ function vResultados(){
     svg+=`<rect x="${x-bw-1}" y="${b-h1}" width="${bw}" height="${h1}" rx="3" fill="var(--in)"/><rect x="${x+1}" y="${b-h2}" width="${bw}" height="${h2}" rx="3" fill="var(--out)"/>`;
     svg+=`<text x="${x}" y="${H-6}" text-anchor="middle" font-size="11" fill="${cur?"var(--ink)":"var(--muted)"}" font-weight="${cur?700:400}" font-family="Barlow, sans-serif">${MESES[+d.m.slice(5)-1].slice(0,3)}</text>`});
   svg+=`<text x="${W-pl}" y="${top-1}" text-anchor="end" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${M0(mx)}</text></svg>`;
-  return `<h2>Estado de resultados</h2>${perNav()}
-  <div class="panel"><div class="stmt">
+  return `${head("Estado de resultados","resultados")}${perNav()}
+  <div class="kpis">
+    <div class="kpi"><div class="l">Ingresos</div><div class="v in-c">${M0(r.I)}</div></div>
+    <div class="kpi"><div class="l">Costos</div><div class="v out-c">${M0(r.V+r.F)}</div></div>
+    <div class="kpi"><div class="l">Utilidad</div><div class="v ${r.un>=0?"in-c":"out-c"}">${M0(r.un)}</div></div>
+  </div>
+  ${sec("res-er","Estado de resultados","Margen sobre ventas "+(pct==null?"—":nf1.format(pct)+" %"),`<div class="stmt">
     <div class="ln tot" style="border-top:0;padding-top:0;margin-top:0"><span>Ingresos por ventas</span><span class="num in-c">${M(r.I)}</span></div>
     ${lines(agrupar(r.ing,"cat"))}
     <div class="ln tot"><span>(−) Costos variables</span><span class="num out-c">${M(r.V)}</span></div>
@@ -497,43 +560,308 @@ function vResultados(){
     ${lines(agrupar(r.gas.filter(g=>esFijo(g.cat)),"cat"))}
     <div class="ln fin"><span>Utilidad ${r.un>=0?"neta":"(pérdida)"}</span><span class="num ${r.un>=0?"in-c":"out-c"}">${M(r.un)}</span></div>
     <div class="ln sub" style="padding-left:0"><span>Margen sobre ventas</span><span class="num">${pct==null?"—":nf1.format(pct)+" %"}</span></div>
-  </div></div>
-  <h3>Ventas de animales</h3>
-  <div class="kpis"><div class="kpi"><div class="l">Cabezas</div><div class="v">${nf0.format(vt.cab)}</div></div><div class="kpi"><div class="l">Kg vendidos</div><div class="v">${nf0.format(vt.kg)}</div></div><div class="kpi"><div class="l">Precio / kg</div><div class="v">${vt.kg?M(vt.monto/vt.kg):"—"}</div></div></div>
-  <h3>Últimos 6 meses</h3>
-  <div class="panel chart">${svg}<div class="row small" style="margin-top:6px"><span><span class="in-c">■</span> Ingresos</span><span><span class="out-c">■</span> Costos</span></div></div>
-  <div class="spread" style="margin:22px 0 8px"><h3 style="margin:0">Ingresos del período</h3><button class="btn sm" data-act="csv">Exportar CSV</button></div>
-  <div class="list">${r.ing.length?[...r.ing].sort((a,b)=>b.fecha.localeCompare(a.fecha)).map(finRow).join(""):`<div class="empty">Las ventas de animales se anotan solas desde Inventario. Otros ingresos se cargan con “+ Ingreso”.</div>`}</div>`;
+  </div>`)}
+  ${sec("res-ventas","Ventas de animales",plural(vt.cab,"cabeza")+" · "+nf0.format(vt.kg)+" kg",`<div class="kpis"><div class="kpi"><div class="l">Cabezas</div><div class="v">${nf0.format(vt.cab)}</div></div><div class="kpi"><div class="l">Kg vendidos</div><div class="v">${nf0.format(vt.kg)}</div></div><div class="kpi"><div class="l">Precio / kg</div><div class="v">${vt.kg?M(vt.monto/vt.kg):"—"}</div></div></div>`)}
+  ${sec("res-graf","Últimos 6 meses","Ingresos y costos de cada mes",`<div class="chart">${svg}<div class="row small" style="margin-top:6px"><span><span class="in-c">■</span> Ingresos</span><span><span class="out-c">■</span> Costos</span></div></div>`)}
+  ${sec("res-ing","Ingresos del período ("+r.ing.length+")",r.ing.length?"Total "+M0(r.I):"Sin ingresos registrados",`<div class="row"><button class="btn sm" data-act="csv">Exportar CSV</button></div><div class="list">${r.ing.length?[...r.ing].sort((a,b)=>b.fecha.localeCompare(a.fecha)).map(finRow).join(""):`<div class="empty">Las ventas de animales se anotan solas desde Inventario. Otros ingresos se cargan con “+ Ingreso”.</div>`}</div>`)}`;
 }
 function vAjustes(){
-  const c=S.cfg;
-  return `<h2>Ajustes</h2>
-  <form class="f panel" id="fCfg">
+  const c=S.cfg,mias=razasMias();
+  const acceso=S.lic&&S.lic.owner?`<div style="font-size:15px">Sos el propietario de esta app. Los códigos para otros usuarios se crean en el Admin de códigos.</div>`:S.lic?`<div class="facts" style="margin:0"><div><span>A nombre de</span><span>${esc(S.lic.n||"—")}</span></div><div><span>Vence</span><span>${S.lic.e?esc(fl(S.lic.e)):"Sin vencimiento"}</span></div><div><span>ID del teléfono</span><span class="num">${devFmt(devId())}</span></div></div>
+    <div class="row" style="margin-top:10px"><button class="btn sm" data-act="pedirCodigo">Pedir renovación por WhatsApp</button></div>
+    <form class="f" id="fCode" style="margin-top:10px"><label for="codeIn">Cargar código nuevo (renovación)</label><textarea id="codeIn" rows="2" autocomplete="off" spellcheck="false"></textarea><div id="codeMsg"></div><div class="actions"><button class="btn" type="submit">Activar código</button></div></form>`:"";
+  return `${head("Ajustes")}
+  ${sec("aj-granja","Datos de la granja",esc(c.granja)+(c.prop?" · "+esc(c.prop):""),`<form class="f" id="fCfg">
     <label>Nombre de la granja<input id="cGr" value="${esc(c.granja)}" required></label>
+    <div class="two"><label>Propietario<input id="cProp" value="${esc(c.prop||"")}"></label><label>Teléfono<input id="cTel" value="${esc(c.tel||"")}" inputmode="tel"></label></div>
+    <label>Ubicación<input id="cDir" value="${esc(c.dir||"")}" placeholder="Comarca, municipio, departamento"></label>
     <div class="three"><label>Moneda<input id="cMon" value="${esc(c.moneda)}" maxlength="4"></label><label>Días de gestación<input id="cGest" type="number" min="100" max="130" value="${c.gest}"></label><label>Días de lactancia<input id="cLact" type="number" min="14" max="60" value="${c.lact}"></label></div>
+    <div class="hint">El nombre, el propietario, el teléfono y la ubicación salen en el encabezado de los reportes PDF.</div>
     <div class="actions"><button class="btn pri" type="submit">Guardar ajustes</button></div>
-  </form>
-  <h3>Tu acceso</h3>
-  <div class="panel" style="display:grid;gap:10px">
-    ${S.lic&&S.lic.owner?`<div style="font-size:15px">Sos el propietario de esta app. Los códigos para otros usuarios se crean en el Admin de códigos.</div>`:S.lic?`<div class="facts" style="margin:0"><div><span>A nombre de</span><span>${esc(S.lic.n||"—")}</span></div><div><span>Vence</span><span>${S.lic.e?esc(fl(S.lic.e)):"Sin vencimiento"}</span></div><div><span>ID del teléfono</span><span class="num">${devFmt(devId())}</span></div></div>
-    <div class="row"><button class="btn sm" data-act="pedirCodigo">Pedir renovación por WhatsApp</button></div>
-    <form class="f" id="fCode"><label for="codeIn">Cargar código nuevo (renovación)</label><textarea id="codeIn" rows="2" autocomplete="off" spellcheck="false"></textarea><div id="codeMsg"></div><div class="actions"><button class="btn" type="submit">Activar código</button></div></form>`:""}
-  </div>
-  <h3>Respaldo de tus datos</h3>
-  <div class="panel" style="display:grid;gap:10px">
+  </form>`)}
+  ${sec("aj-razas","Razas",razasBase().length+" en la lista · "+plural(mias.length,"agregada")+" por vos",razasAdmin())}
+  ${sec("aj-acceso","Tu acceso",S.lic&&S.lic.owner?"Propietario":S.lic&&S.lic.e?"Vence el "+esc(fl(S.lic.e)):"Activo",acceso)}
+  ${sec("aj-resp","Respaldo de tus datos",c.ultimoRespaldo?"Último respaldo: "+fl(c.ultimoRespaldo):"Todavía no hiciste un respaldo",`<div style="display:grid;gap:10px">
     <div style="font-size:15px">Tus datos se guardan solo en este teléfono. Descargá un respaldo cada semana y guardalo en Archivos, Drive o WhatsApp. Con ese archivo recuperás todo en otro teléfono.</div>
-    <div class="muted small">${c.ultimoRespaldo?"Último respaldo: "+fl(c.ultimoRespaldo):"Todavía no hiciste un respaldo"}</div>
     <div class="row"><button class="btn pri" data-act="respaldo">Descargar respaldo</button></div>
     <form class="f" id="fRest">
       <label>Restaurar desde archivo<input type="file" id="rFile" accept=".json,application/json"></label>
       <label>…o pegá el texto del respaldo<textarea id="rTxt" rows="2"></textarea></label>
       <div id="rMsg"></div>
       <div class="actions"><button class="btn" type="submit" id="rBtn">Restaurar</button></div>
-    </form>
-  </div>
-  ${hayEjemplos()?`<h3>Datos de ejemplo</h3><div class="panel spread"><span style="font-size:15px">Borrar todo lo marcado como ejemplo y empezar con tu granja.</span><button class="btn danger sm" data-act="borrarEj">Borrar ejemplos</button></div>`:""}
+    </form></div>`,{alerta:!c.ultimoRespaldo||dias(c.ultimoRespaldo,hoy())>30?"Pendiente":""})}
+  ${hayEjemplos()?sec("aj-ej","Datos de ejemplo","Borralos para empezar con tu granja",`<div class="spread"><span style="font-size:15px">Borrar todo lo marcado como ejemplo.</span><button class="btn danger sm" data-act="borrarEj">Borrar ejemplos</button></div>`):""}
   <div style="margin-top:18px"><button class="btn" data-act="tab" data-k="inicio">← Volver al inicio</button></div>`;
 }
+
+/* ---------- Razas (las más usadas en Nicaragua, según INTA) ---------- */
+const RAZAS=[["Razas puras",["Landrace","Yorkshire (Large White)","Duroc","Hampshire","Pietrain","Poland China","Mangalica"]],
+  ["Criollos y cruces",["Criollo (curro)","Mestizo","Landrace × Yorkshire (F1)","Duroc × Landrace","Duroc × Yorkshire","Duroc × (Landrace × Yorkshire)","Criollo × Landrace","Criollo × Yorkshire"]],
+  ["Líneas genéticas",["Hypor","Topigs 40 (T40)","Topigs TRAXX"]]];
+const razasBase=()=>RAZAS.reduce((a,g)=>a.concat(g[1]),[]);
+const razasMias=()=>(S.cfg.razas||[]).filter(x=>!razasBase().includes(x));
+function razaOpts(sel){
+  const mias=razasMias().slice();
+  if(sel&&sel!=="__nueva"&&!razasBase().includes(sel)&&!mias.includes(sel))mias.push(sel);
+  return `<option value="">— Sin especificar —</option>`+RAZAS.map(([g,l])=>`<optgroup label="${g}">${opts(l,sel)}</optgroup>`).join("")+(mias.length?`<optgroup label="Agregadas por vos">${opts(mias,sel)}</optgroup>`:"")+`<option value="__nueva">+ Agregar nueva raza…</option>`;
+}
+function agregarRaza(n){n=String(n||"").trim().replace(/\s+/g," ").slice(0,40);if(!n)return null;
+  const ex=razasBase().concat(razasMias()).find(x=>x.toLowerCase()===n.toLowerCase());if(ex)return ex;
+  S.cfg.razas=(S.cfg.razas||[]).concat([n]);saveLocal();return n}
+function razasAdmin(){const m=razasMias();
+  return `<div class="muted small" style="margin-bottom:10px">La lista trae las razas, cruces y líneas genéticas más usadas en Nicaragua. Las que agregues aparecen al final, en “Agregadas por vos”.</div>
+  <div class="addrow"><input id="ajRaza" maxlength="40" placeholder="Nueva raza o cruce" aria-label="Nueva raza o cruce"><button class="btn" data-act="addRaza">Agregar</button></div>
+  <div class="list">${m.length?m.map(x=>`<div class="item"><div class="main"><div class="t">${esc(x)}</div></div><button class="btn sm" data-act="delRaza" data-k="${esc(x)}">Quitar</button></div>`).join(""):`<div class="empty">Todavía no agregaste razas propias.</div>`}</div>`}
+
+/* ---------- Generador de PDF (sin librerías, el mismo del Libro del Negocio) ---------- */
+const PDF_WH=[278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584];
+const PDF_WB=[278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584];
+const PDF_SPECIAL={"–":0x96,"—":0x97,"‘":0x91,"’":0x92,"“":0x93,"”":0x94,"•":0x95,"…":0x85,"€":0x80,"−":0x2D};
+function pdfCode(ch){const c=ch.charCodeAt(0);if(c<128)return c;if(c>=160&&c<=255)return c;return PDF_SPECIAL[ch]!==undefined?PDF_SPECIAL[ch]:63}
+function pdfW(ch,b){const c=ch.charCodeAt(0),T=b?PDF_WB:PDF_WH;if(c>=32&&c<=126)return T[c-32];
+  if(ch==="·")return 278;if(ch==="–")return 556;if(ch==="—")return 1000;if("‘’".includes(ch))return 222;if("“”".includes(ch))return 333;if(ch==="•")return 350;if(ch==="…")return 1000;if(ch==="ª"||ch==="º")return 370;
+  const base=ch.normalize("NFD")[0];const bc=base.charCodeAt(0);return bc>=32&&bc<=126?T[bc-32]:556}
+function pdfTW(s,sz,b){let w=0;for(const ch of String(s))w+=pdfW(ch,b);return w*sz/1000}
+function pdfHex(s){let h="";for(const ch of String(s))h+=pdfCode(ch).toString(16).padStart(2,"0");return h}
+function pdfFit(s,w,sz,b){s=String(s);if(pdfTW(s,sz,b)<=w)return s;while(s.length>1&&pdfTW(s+"…",sz,b)>w)s=s.slice(0,-1);return s+"…"}
+function pdfWrap(s,w,sz,b){const out=[];String(s).split("\n").forEach(par=>{let line="";par.split(/\s+/).forEach(word=>{const t=line?line+" "+word:word;if(pdfTW(t,sz,b)>w&&line){out.push(line);line=word}else line=t});out.push(line)});return out}
+function pdfRGB(h){h=h.replace("#","");return [0,2,4].map(i=>(parseInt(h.substr(i,2),16)/255).toFixed(3)).join(" ")}
+
+function PDFDoc(meta){
+  const W=595.28,H=841.89,M=36,CW=W-2*M,pages=[];let c=null,y=0;
+  const INK="#251C1E",MUT="#6E6265",LINE="#DCD4D1",BAND="#7A2241",GOLD="#F2B8C8",SOFT="#F6EEF0";
+  let logo=null;
+  if(meta.logo&&/^data:image\/jpeg;base64,/.test(meta.logo)){try{const bin=atob(meta.logo.split(",")[1]);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);logo={data:u,w:meta.logoW||300,h:meta.logoH||300}}catch(e){logo=null}}
+  const f2=n=>(+n).toFixed(2);
+  const T=(x,yy,s,sz=9,b=false,color=INK,al="l")=>{s=String(s==null?"":s);const w=pdfTW(s,sz,b);if(al==="r")x-=w;else if(al==="c")x-=w/2;c.push(`BT /${b?"F2":"F1"} ${sz} Tf ${pdfRGB(color)} rg ${f2(x)} ${f2(yy)} Td <${pdfHex(s)}> Tj ET`)};
+  const R=(x,yy,w,h,color)=>c.push(`${pdfRGB(color)} rg ${f2(x)} ${f2(yy)} ${f2(w)} ${f2(h)} re f`);
+  const L=(x1,y1,x2,y2,color=LINE,lw=0.6)=>c.push(`${pdfRGB(color)} RG ${lw} w ${f2(x1)} ${f2(y1)} m ${f2(x2)} ${f2(y2)} l S`);
+  function header(first){
+    const bh=first?92:52;R(0,H-bh,W,bh,BAND);R(0,H-bh-3,W,3,GOLD);
+    let tx=M;
+    if(logo){const s=first?62:34,ly=H-bh+(bh-s)/2;c.push(`q ${s} 0 0 ${s} ${f2(M)} ${f2(ly)} cm /Im1 Do Q`);tx=M+s+12}
+    if(first){
+      T(tx,H-36,pdfFit(meta.negocio||"Mi Granja Porcina",CW-210-(tx-M),16,true),16,true,"#FFFFFF");
+      const d1=[meta.ruc?"RUC "+meta.ruc:"",meta.tel?"Tel. "+meta.tel:""].filter(Boolean).join("  ·  ");
+      if(d1)T(tx,H-52,pdfFit(d1,CW-210-(tx-M),8.5),8.5,false,"#F1D3DC");
+      const d2=[meta.dir,meta.prop?"Propietario: "+meta.prop:""].filter(Boolean).join("  ·  ");
+      if(d2)T(tx,H-65,pdfFit(d2,CW-210-(tx-M),8.5),8.5,false,"#F1D3DC");
+      T(W-M,H-36,pdfFit(meta.titulo,200,12.5,true),12.5,true,GOLD,"r");
+      if(meta.periodo)T(W-M,H-52,pdfFit(meta.periodo,200,9),9,false,"#FFFFFF","r");
+      y=H-bh-26;
+    }else{
+      T(tx,H-31,pdfFit(meta.negocio||"Mi Granja Porcina",CW-220,11,true),11,true,"#FFFFFF");
+      T(W-M,H-31,pdfFit(meta.titulo+(meta.periodo?" · "+meta.periodo:""),260,9),9,false,GOLD,"r");
+      y=H-bh-24;
+    }
+  }
+  function page(){c=[];pages.push(c);header(pages.length===1)}
+  page();
+  const api={
+    W,H,M,CW,
+    get y(){return y},set y(v){y=v},
+    T,R,L,
+    ensure(h){if(y-h<M+28)page()},
+    space(h){y-=h},
+    h1(s,color=BAND){api.ensure(95);y-=4;R(M,y-3,4,15,GOLD);T(M+10,y,s,12.5,true,color);y-=10;L(M,y,W-M,y,LINE,0.8);y-=16},
+    p(s,sz=9,color=MUT,b=false){pdfWrap(s,CW,sz,b).forEach(l=>{api.ensure(sz+4);T(M,y,l,sz,b,color);y-=sz+4})},
+    kpis(items){api.ensure(54);const n=items.length,g=8,w=(CW-g*(n-1))/n;items.forEach((k,i)=>{const x=M+i*(w+g);R(x,y-40,w,46,SOFT);R(x,y-40,w,2.5,k.c||BAND);T(x+8,y-8,pdfFit(k.l.toUpperCase(),w-16,7,true),7,true,MUT);T(x+8,y-28,pdfFit(k.v,w-16,12.5,true),12.5,true,k.vc||INK)});y-=58},
+    row(l,v,o={}){api.ensure(17);const sz=o.sz||9.5,b=!!o.b,ind=o.ind||0;if(o.fill)R(M,y-5,CW,17,o.fill);T(M+6+ind,y,pdfFit(l,CW-180-ind,sz,b),sz,b,o.lc||INK);if(o.v2!==undefined)T(W-M-110,y,o.v2,sz,b,o.vc2||MUT,"r");T(W-M-6,y,v,sz,b,o.vc||INK,"r");y-=o.gap||16;if(o.line)L(M,y+10,W-M,y+10,LINE,0.5)},
+    table(cols,rows,o={}){
+      const sz=o.sz||8.5,rh=sz+7.5;let tot=cols.reduce((a,c)=>a+c.w,0);const sc=CW/tot;cols=cols.map(c=>({...c,w:c.w*sc}));
+      const head=()=>{api.ensure(rh+6);R(M,y-5,CW,rh+2,BAND);let x=M;cols.forEach(cl=>{const al=cl.al||"l";T(al==="r"?x+cl.w-5:x+5,y,pdfFit(cl.t,cl.w-8,sz-0.5,true),sz-0.5,true,"#FFFFFF",al);x+=cl.w});y-=rh+3};
+      head();
+      rows.forEach((r,ri)=>{const isTot=r._tot;if(y-rh<M+28){page();head()}
+        if(isTot)R(M,y-5,CW,rh,"#F1E1E6");else if(ri%2)R(M,y-5,CW,rh,"#FAF6F7");
+        let x=M;cols.forEach((cl,ci)=>{const v=r[ci],al=cl.al||"l";const col=(r._c&&r._c[ci])||INK;T(al==="r"?x+cl.w-5:x+5,y,pdfFit(v==null?"":v,cl.w-8,sz,isTot||cl.b),sz,isTot||!!cl.b,col,al);x+=cl.w});
+        y-=rh});
+      L(M,y+rh-5,W-M,y+rh-5,LINE,0.6);y-=8},
+    bars(items,fmt){const mx=Math.max(1,...items.map(i=>i[1]));items.forEach(([l,v,col])=>{api.ensure(24);T(M,y,pdfFit(l,200,9),9,false,INK);T(W-M,y,fmt(v),9,true,INK,"r");y-=7;R(M,y-4,CW,5,"#EFE7E9");R(M,y-4,Math.max(2,CW*v/mx),5,col||"#9C2F52");y-=16})},
+    firmas(labels){api.ensure(70);y-=34;const n=labels.length,g=30,w=(CW-g*(n-1))/n;labels.forEach((l,i)=>{const x=M+i*(w+g);L(x,y,x+w,y,INK,0.7);T(x+w/2,y-12,l,8.5,false,MUT,"c")});y-=30},
+    get paginas(){return pages},
+    logoSrc:meta.logo||"",
+    build(){
+      const enc=new TextEncoder(),parts=[],offs=[];let len=0;
+      const push=x=>{const u=typeof x==="string"?enc.encode(x):x;parts.push(u);len+=u.length};
+      const obj=(n,body)=>{offs[n]=len;push(`${n} 0 obj\n`);if(Array.isArray(body))body.forEach(push);else push(body);push("\nendobj\n")};
+      push("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n".replace(/[\xE2\xE3\xCF\xD3]/g,""));
+      const np=pages.length,fecha=new Date(),fs=String(fecha.getDate()).padStart(2,"0")+"/"+String(fecha.getMonth()+1).padStart(2,"0")+"/"+fecha.getFullYear();
+      pages.forEach((pc,i)=>{c=pc;L(M,M-2,W-M,M-2,LINE,0.5);T(M,M-14,"Mi Granja Porcina"+(meta.negocio&&meta.negocio!=="Mi Granja Porcina"?" · "+meta.negocio:""),7.5,false,MUT);T(W/2,M-14,"Generado el "+fs,7.5,false,MUT,"c");T(W-M,M-14,"Página "+(i+1)+" de "+np,7.5,false,MUT,"r")});
+      // 1 catálogo, 2 páginas, 3 F1, 4 F2, 5 imagen, 6.. páginas y contenidos
+      const first=6,kids=pages.map((_,i)=>`${first+i*2} 0 R`).join(" ");
+      obj(1,"<< /Type /Catalog /Pages 2 0 R >>");
+      obj(2,`<< /Type /Pages /Kids [${kids}] /Count ${np} >>`);
+      obj(3,"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+      obj(4,"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+      if(logo)obj(5,[`<< /Type /XObject /Subtype /Image /Width ${logo.w} /Height ${logo.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${logo.data.length} >>\nstream\n`,logo.data,"\nendstream"]);
+      else obj(5,"<< /Type /XObject /Subtype /Form /BBox [0 0 1 1] /Length 0 >>\nstream\n\nendstream");
+      pages.forEach((pc,i)=>{const s=pc.join("\n");const n=first+i*2;
+        obj(n,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> /XObject << /Im1 5 0 R >> >> /Contents ${n+1} 0 R >>`);
+        obj(n+1,`<< /Length ${enc.encode(s).length} >>\nstream\n${s}\nendstream`)});
+      const total=first+np*2,xref=len;let x=`xref\n0 ${total}\n0000000000 65535 f \n`;for(let i=1;i<total;i++)x+=String(offs[i]).padStart(10,"0")+" 00000 n \n";
+      push(x+`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+      const out=new Uint8Array(len);let o=0;parts.forEach(p=>{out.set(p,o);o+=p.length});return out}
+  };
+  return api;
+}
+const PDF_LOGO="data:image/jpeg;base64,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";
+
+/* ---------- Reportes en PDF ---------- */
+const POS="#2E7A4F",NEG="#B23A2E",PMUT="#6E6265",PSOFT="#F6EEF0",PTOT="#F1E1E6";
+function pdfDoc(titulo,periodo){const c=S.cfg;return PDFDoc({negocio:c.granja,tel:c.tel,dir:c.dir,prop:c.prop,logo:PDF_LOGO,logoW:240,logoH:240,titulo,periodo})}
+function slug(s){return String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"")}
+const pctT=(x,t)=>t>0?nf1.format(x/t*100)+" %":"—";
+
+function pdfResultados(){
+  const r=resultado(),vt=ventasPer(),d=pdfDoc("Estado de resultados",perLbl());
+  d.kpis([{l:"Ingresos",v:M0(r.I),vc:POS},{l:"Costos",v:M0(r.V+r.F),vc:NEG},{l:"Utilidad",v:M0(r.un),vc:r.un>=0?POS:NEG},{l:"Margen",v:pctT(r.un,r.I)}]);
+  d.h1("Estado de resultados");
+  d.row("Ingresos por ventas",M(r.I),{b:true,fill:PSOFT,vc:POS});
+  agrupar(r.ing,"cat").forEach(([k,v])=>d.row(k,M(v),{ind:12,sz:9,lc:PMUT,v2:pctT(v,r.I)}));
+  d.row("(−) Costos variables",M(r.V),{b:true,fill:PSOFT,vc:NEG});
+  agrupar(r.gas.filter(g=>!esFijo(g.cat)),"cat").forEach(([k,v])=>d.row(k,M(v),{ind:12,sz:9,lc:PMUT,v2:pctT(v,r.I)}));
+  d.row("Margen de contribución",M(r.mc),{b:true,line:true,v2:pctT(r.mc,r.I)});
+  d.row("(−) Costos fijos",M(r.F),{b:true,fill:PSOFT,vc:NEG});
+  agrupar(r.gas.filter(g=>esFijo(g.cat)),"cat").forEach(([k,v])=>d.row(k,M(v),{ind:12,sz:9,lc:PMUT,v2:pctT(v,r.I)}));
+  d.space(4);
+  d.row(r.un>=0?"Utilidad neta":"Pérdida del período",M(r.un),{b:true,sz:11,fill:PTOT,vc:r.un>=0?POS:NEG,v2:pctT(r.un,r.I),gap:20});
+  d.p("La columna del medio muestra cada valor como porcentaje de los ingresos.",8.5);
+  d.h1("Ventas de animales");
+  d.kpis([{l:"Cabezas vendidas",v:nf0.format(vt.cab)},{l:"Kg vendidos",v:nf0.format(vt.kg)},{l:"Precio por kg",v:vt.kg?M(vt.monto/vt.kg):"—"},{l:"Monto",v:M0(vt.monto)}]);
+  const sm=seisMeses();
+  d.h1("Últimos 6 meses");
+  d.table([{t:"Mes",w:3},{t:"Ingresos",w:2,al:"r"},{t:"Costos",w:2,al:"r"},{t:"Utilidad",w:2,al:"r"}],
+    sm.map(x=>Object.assign([mesLbl(x.m),M(x.i),M(x.c),M(x.u)],{_c:[null,null,null,x.u>=0?POS:NEG]})).concat([Object.assign(["Total",M(sm.reduce((a,x)=>a+x.i,0)),M(sm.reduce((a,x)=>a+x.c,0)),M(sm.reduce((a,x)=>a+x.u,0))],{_tot:true})]));
+  d.firmas(["Elaborado por","Revisado por"]);
+  return d;
+}
+function pdfCostos(){
+  const {r,T,vt,dest,cen,alim,cria}=datosCostos(),d=pdfDoc("Estructura de costos",perLbl());
+  d.kpis([{l:"Costo total",v:M0(T)},{l:"Variable",v:M0(r.V),vc:"#8A6108"},{l:"Fijo",v:M0(r.F),vc:PMUT},{l:"Alimento",v:pctT(alim,T)}]);
+  d.h1("Por centro de costo");
+  CENTROS.forEach(c=>d.row(c,M(cen[c]),{v2:pctT(cen[c],T)}));
+  d.row("Total",M(T),{b:true,fill:PTOT,v2:T?"100 %":"—"});
+  d.h1("Por rubro");
+  const rub=agrupar(r.gas,"cat");
+  if(rub.length)d.table([{t:"Rubro",w:4},{t:"Tipo",w:2},{t:"Monto",w:2.4,al:"r"},{t:"% del total",w:1.6,al:"r"}],
+    rub.map(([k,v])=>[k,esFijo(k)?"Fijo":"Variable",M(v),pctT(v,T)]).concat([Object.assign(["Total","",M(T),T?"100 %":"—"],{_tot:true})]));
+  else d.p("Sin gastos en el período.");
+  d.h1("Costos unitarios");
+  d.row("Lechones destetados",nf0.format(dest));
+  d.row("Costo por lechón destetado",dest?M(cria/dest):"—",{b:true});
+  d.row("Kg vendidos",nf0.format(vt.kg));
+  d.row("Costo por kg vendido",vt.kg?M(T/vt.kg):"—",{b:true});
+  d.row("Precio promedio por kg",vt.kg?M(vt.monto/vt.kg):"—");
+  d.p("El costo por lechón usa el centro Cría más su parte de los gastos generales. El costo por kg divide todos los costos del período entre los kg vendidos.",8.5);
+  const L=[...r.gas].sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  d.h1("Detalle de gastos");
+  if(L.length)d.table([{t:"Fecha",w:1.6},{t:"Detalle",w:4.4},{t:"Rubro",w:2.8},{t:"Centro",w:1.6},{t:"Monto",w:2.2,al:"r"}],
+    L.map(f=>[fl(f.fecha),f.nota||f.cat,f.cat,f.centro||"General",M(f.monto)]).concat([Object.assign(["Total","","","",M(T)],{_tot:true})]),{sz:8});
+  else d.p("Sin gastos en el período.");
+  return d;
+}
+function pdfInventario(){
+  const inv=inventario(),L=lotesAct(),d=pdfDoc("Inventario de animales","Al "+fl(hoy()));
+  const R=Object.values(S.rep).filter(r=>r.estado!=="baja").sort((a,b)=>TIPOS_REP.indexOf(a.tipo)-TIPOS_REP.indexOf(b.tipo)||a.tag.localeCompare(b.tag,"es",{numeric:true}));
+  d.kpis([{l:"Total de animales",v:nf0.format(inv.total)},{l:"Reproductores",v:nf0.format(R.length)},{l:"Lotes activos",v:nf0.format(L.length)},{l:"En engorde",v:nf0.format(inv.Engorde)}]);
+  d.h1("Animales por etapa");
+  const et=[["Cerdas","Madres y primerizas"],["Verracos","Padrotes"],...ETAPAS.map(e=>[e,ETAPA_TXT[e]])];
+  d.table([{t:"Grupo",w:2},{t:"Descripción",w:4},{t:"Cabezas",w:1.4,al:"r"}],et.map(([k,s])=>[k,s.replace("~","aprox. "),nf0.format(inv[k]||0)]).concat([Object.assign(["Total","",nf0.format(inv.total)],{_tot:true})]));
+  d.h1("Lotes");
+  if(L.length)d.table([{t:"Lote",w:3.4},{t:"Etapa",w:1.8},{t:"Cabezas",w:1.3,al:"r"},{t:"Peso prom.",w:1.6,al:"r"},{t:"Desde",w:1.8},{t:"Días",w:1,al:"r"}],
+    L.map(l=>[l.nombre,l.etapa,nf0.format(l.cabezas),l.peso?nf1.format(l.peso)+" kg":"—",fl(l.inicio),nf0.format(dias(l.inicio,hoy()))]));
+  else d.p("No hay lotes activos.");
+  d.h1("Reproductores");
+  if(R.length)d.table([{t:"Arete",w:1.3},{t:"Nombre",w:2},{t:"Tipo",w:1.5},{t:"Raza",w:3.4},{t:"Edad",w:1.3,al:"r"},{t:"Estado",w:1.6}],
+    R.map(r=>[r.tag,r.nombre||"—",r.tipo,r.raza||"—",r.nac?Math.floor(dias(r.nac,hoy())/30.4)+" meses":"—",r.tipo==="Verraco"?"—":ST[estadoCerda(r).st][0]]));
+  else d.p("No hay reproductores cargados.");
+  const mes=hoy().slice(0,7),MV=Object.values(S.movs).filter(m=>(m.fecha||"").slice(0,7)===mes).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  d.h1("Movimientos de "+mesLbl(mes));
+  if(MV.length)d.table([{t:"Fecha",w:1.6},{t:"Tipo",w:1.6},{t:"Lote o animal",w:3.2},{t:"Detalle",w:3.6},{t:"Monto",w:1.8,al:"r"}],
+    MV.map(m=>[fl(m.fecha),m.tipo,movQuien(m),movDet(m),m.monto?M0(m.monto):""]),{sz:8});
+  else d.p("Sin movimientos este mes.");
+  return d;
+}
+function pdfPrenez(){
+  const C=cerdas().map(c=>({c,s:estadoCerda(c)})),n=k=>C.filter(x=>x.s.st===k).length,AL=alertas(),I=indicadores();
+  const orden={lactando:0,"preñada":1,servida:2,destetada:3,vacia:4};
+  C.sort((a,b)=>orden[a.s.st]-orden[b.s.st]||(a.s.due||"").localeCompare(b.s.due||""));
+  const d=pdfDoc("Preñez y partos","Al "+fl(hoy()));
+  d.kpis([{l:"Preñadas",v:String(n("preñada"))},{l:"Servidas",v:String(n("servida"))},{l:"Lactando",v:String(n("lactando"))},{l:"Vacías",v:String(n("vacia")+n("destetada"))}]);
+  d.h1("Pendientes");
+  if(AL.length)d.table([{t:"Arete",w:1.3},{t:"Cerda",w:2.2},{t:"Pendiente",w:4},{t:"Fecha",w:1.8},{t:"Cuándo",w:1.6}],
+    AL.map(a=>Object.assign([a.c.tag,a.c.nombre||a.c.tipo,a.t,fl(a.f),cuando(a.r)],{_c:[null,null,null,null,a.urg?NEG:null]})));
+  else d.p("Nada pendiente en los próximos días.");
+  d.h1("Estado de las cerdas");
+  const prox=s=>s.due?"Parto "+fl(s.due):s.st==="lactando"?"Destete "+fl(addD(s.parto,+S.cfg.lact||21)):"—";
+  if(C.length)d.table([{t:"Arete",w:1.2},{t:"Nombre",w:2},{t:"Estado",w:1.6},{t:"Último servicio",w:2},{t:"Próximo",w:2.6},{t:"Partos",w:1,al:"r"}],
+    C.map(({c,s})=>[c.tag,c.nombre||c.tipo,ST[s.st][0],s.svc?fl(s.svc):"—",prox(s),String(evDe(c.id).filter(e=>e.tipo==="Parto").length)]));
+  else d.p("No hay cerdas cargadas.");
+  d.h1("Indicadores de los últimos 12 meses");
+  d.row("Partos",nf0.format(I.partos));
+  d.row("Partos por cerda",nf1.format(I.ppa));
+  d.row("Nacidos totales por parto",nf1.format(I.pt));
+  d.row("Nacidos vivos por parto",nf1.format(I.pv),{b:true});
+  d.row("Destetados por camada",nf1.format(I.pd),{b:true});
+  d.row("Mortalidad en lactancia",I.mort==null?"—":nf1.format(I.mort)+" %");
+  d.p("Gestación de "+S.cfg.gest+" días y lactancia de "+S.cfg.lact+" días, según los ajustes de la app.",8.5);
+  const desde=addD(hoy(),-365),P=Object.values(S.eventos).filter(e=>e.tipo==="Parto"&&e.fecha>=desde).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  d.h1("Partos de los últimos 12 meses");
+  if(P.length)d.table([{t:"Fecha",w:1.8},{t:"Arete",w:1.2},{t:"Cerda",w:2.4},{t:"Vivos",w:1,al:"r"},{t:"Muertos",w:1.1,al:"r"},{t:"Momias",w:1.1,al:"r"}],
+    P.map(e=>{const c=S.rep[e.cerda]||{};return [fl(e.fecha),c.tag||"—",c.nombre||c.tipo||"—",String(e.vivos||0),String(e.muertos||0),String(e.momias||0)]}));
+  else d.p("Sin partos registrados en los últimos 12 meses.");
+  return d;
+}
+function generarPDF(k){
+  const R={resultados:[pdfResultados,"Estado de resultados "+perLbl()],costos:[pdfCostos,"Estructura de costos "+perLbl()],inventario:[pdfInventario,"Inventario "+fl(hoy())],prenez:[pdfPrenez,"Preñez y partos "+fl(hoy())]}[k];
+  if(!R)return;
+  try{closeModal();verPDF(R[1],R[0]())}catch(e){console.error(e);toast("No se pudo generar el PDF")}
+}
+
+/* ---------- Visor de PDF dentro de la app ---------- */
+function pdfTexto(hex){let s="";const R={};Object.entries(PDF_SPECIAL).forEach(([k,v])=>{if(v>=0x80)R[v]=k});for(let i=0;i<hex.length;i+=2){const c=parseInt(hex.substr(i,2),16);s+=R[c]||String.fromCharCode(c)}return s}
+function pintarPagina(cv,ops,logoImg,ancho){
+  const W=595.28,H=841.89,dpr=Math.min(3,window.devicePixelRatio||2),k=ancho/W;
+  cv.width=Math.round(W*k*dpr);cv.height=Math.round(H*k*dpr);cv.style.width=ancho+"px";cv.style.height=Math.round(H*k)+"px";
+  const g=cv.getContext("2d");g.setTransform(k*dpr,0,0,k*dpr,0,0);g.fillStyle="#fff";g.fillRect(0,0,W,H);
+  const rgb=(r,gg,b)=>`rgb(${Math.round(r*255)},${Math.round(gg*255)},${Math.round(b*255)})`;let m;
+  ops.forEach(op=>{
+    if((m=op.match(/^BT \/(F[12]) ([\d.]+) Tf ([\d.]+) ([\d.]+) ([\d.]+) rg ([-\d.]+) ([-\d.]+) Td <([0-9a-f]*)> Tj ET$/))){g.font=(m[1]==="F2"?"bold ":"")+m[2]+'px Helvetica, Arial, sans-serif';g.fillStyle=rgb(+m[3],+m[4],+m[5]);g.fillText(pdfTexto(m[8]),+m[6],H-+m[7]);return}
+    if((m=op.match(/^([\d.]+) ([\d.]+) ([\d.]+) rg ([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+) re f$/))){g.fillStyle=rgb(+m[1],+m[2],+m[3]);g.fillRect(+m[4],H-+m[5]-+m[7],+m[6],+m[7]);return}
+    if((m=op.match(/^([\d.]+) ([\d.]+) ([\d.]+) RG ([\d.]+) w ([-\d.]+) ([-\d.]+) m ([-\d.]+) ([-\d.]+) l S$/))){g.strokeStyle=rgb(+m[1],+m[2],+m[3]);g.lineWidth=+m[4];g.beginPath();g.moveTo(+m[5],H-+m[6]);g.lineTo(+m[7],H-+m[8]);g.stroke();return}
+    if((m=op.match(/^q ([\d.]+) 0 0 ([\d.]+) ([-\d.]+) ([-\d.]+) cm \/Im1 Do Q$/))&&logoImg&&logoImg.complete){const sz=+m[1];g.drawImage(logoImg,+m[3],H-+m[4]-sz,sz,+m[2])}
+  });
+}
+
+let PDFV=null;
+function verPDF(nombre,doc){
+  const bytes=doc.build(),file=new File([bytes],slug(nombre)+".pdf",{type:"application/pdf"}),pags=doc.paginas;
+  cerrarPDF();
+  let share=false;try{share=PROPIA&&!!(navigator.canShare&&navigator.canShare({files:[file]}))}catch(e){}
+  const ov=document.createElement("div");ov.id="pdfv";ov.setAttribute("role","dialog");ov.setAttribute("aria-modal","true");ov.setAttribute("aria-label",nombre);
+  ov.innerHTML=`<div class="pv-top"><button class="pv-x" data-pv="cerrar" aria-label="Cerrar">‹ Volver</button><div class="pv-t"><b>${esc(nombre)}</b><small>${pags.length} página${pags.length===1?"":"s"} · PDF</small></div></div>
+  <div class="pv-body"></div>
+  <div class="pv-bar">${share?`<button class="btn" data-pv="compartir">Compartir</button>`:""}<button class="btn pri" data-pv="guardar">Guardar PDF</button></div>`;
+  document.body.appendChild(ov);document.body.classList.add("pv-on");
+  const body=ov.querySelector(".pv-body"),ancho=Math.min(820,(body.clientWidth||380)-24);
+  let logoImg=null;const dibujar=()=>{body.innerHTML="";pags.forEach((ops,i)=>{const w=document.createElement("div");w.className="pv-page";const cv=document.createElement("canvas");cv.setAttribute("aria-label","Página "+(i+1));w.appendChild(cv);const n=document.createElement("span");n.textContent="Página "+(i+1)+" de "+pags.length;w.appendChild(n);body.appendChild(w);pintarPagina(cv,ops,logoImg,ancho)})};
+  if(doc.logoSrc){logoImg=new Image();logoImg.onload=dibujar;logoImg.onerror=dibujar;logoImg.src=doc.logoSrc}else dibujar();
+  PDFV={file,bytes,nombre};
+  ov.addEventListener("click",async e=>{const b=e.target.closest("[data-pv]");if(!b||!PDFV)return;const a=b.dataset.pv;
+    if(a==="cerrar")cerrarPDF();else if(a==="compartir")compartirPDF(PDFV.file);else if(a==="guardar")guardarPDF(PDFV.file,PDFV.bytes)});
+}
+function cerrarPDF(){const o=document.getElementById("pdfv");if(o)o.remove();document.body.classList.remove("pv-on");PDFV=null}
+async function guardarPDF(f,bytes){
+  if(!PROPIA){try{if(!downloads)throw {code:"unavailable"};await downloads.save({filename:f.name,data:bytes.slice(0)});toast("PDF guardado")}catch(e){if(e&&e.code==="declined")return;toast("No se pudo guardar el PDF en esta vista")}return}
+  try{const u=URL.createObjectURL(f);const a=document.createElement("a");a.href=u;a.download=f.name;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);toast("PDF descargado")}catch(e){toast("No se pudo guardar el PDF")}
+}
+async function compartirPDF(f){
+  try{await navigator.share({files:[f],title:f.name.replace(/\.pdf$/,"").replace(/-/g," ")})}catch(e){if(e&&e.name==="AbortError")return;toast("No se pudo compartir. Usá Guardar PDF.")}
+}
+function agregarInv(){openModal(`<h2>Agregar al inventario</h2><div class="choice">
+  <button type="button" data-act="nuevoRep"><b>Nuevo reproductor</b><span>Cerda, primeriza o verraco, con su raza</span></button>
+  <button type="button" data-act="nuevoMov"><b>Movimiento de lotes</b><span>Compra, venta, muerte, cambio de etapa o pesaje</span></button></div>
+  <div class="actions"><button type="button" class="btn" data-act="close">Cancelar</button></div>`)}
 
 /* ---------- Modales ---------- */
 function openModal(html,mount){
@@ -556,8 +884,7 @@ function verCerda(c){
   <div class="muted" style="margin-top:4px">${esc(c.tipo)}${c.raza?" · "+esc(c.raza):""}${c.nac?" · nació "+fl(c.nac):""}</div>
   <div class="panel" style="margin-top:12px">${esc(detalle(s))}</div>
   <div class="facts"><div><span>Partos</span><span class="num">${partos.length}</span></div><div><span>Vivos por parto</span><span class="num">${partos.length?nf1.format(partos.reduce((a,e)=>a+(+e.vivos||0),0)/partos.length):"—"}</span></div></div>
-  <h3>Historial</h3>
-  <div class="timeline">${ev.length?ev.map(e=>`<button class="ev" data-act="editEv" data-id="${e.id}" style="background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;width:100%"><span class="muted num" style="font-size:13px">${fc(e.fecha)}<br>${e.fecha.slice(0,4)}</span><span><b>${e.tipo}</b>${det(e)?`<br><span class="muted">${esc(det(e))}</span>`:""}${e.nota?`<br><span class="muted">${esc(e.nota)}</span>`:""}</span></button>`).join(""):`<div class="muted">Sin eventos. Empezá con el servicio.</div>`}</div>
+  ${sec("m-hist","Historial ("+ev.length+")",ev.length?"Último: "+esc(ev[0].tipo.toLowerCase())+" · "+fl(ev[0].fecha):"Sin eventos todavía",`<div class="timeline">${ev.length?ev.map(e=>`<button class="ev" data-act="editEv" data-id="${e.id}" style="background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;width:100%"><span class="muted num" style="font-size:13px">${fc(e.fecha)}<br>${e.fecha.slice(0,4)}</span><span><b>${e.tipo}</b>${det(e)?`<br><span class="muted">${esc(det(e))}</span>`:""}${e.nota?`<br><span class="muted">${esc(e.nota)}</span>`:""}</span></button>`).join(""):`<div class="muted">Sin eventos. Empezá con el servicio.</div>`}</div>`)}
   <div class="actions" style="margin-top:14px"><button class="btn" data-act="editRep" data-id="${c.id}">Editar datos</button><button class="btn pri" data-act="nuevoEv" data-id="${c.id}">+ Evento</button></div>`);
 }
 
@@ -618,8 +945,10 @@ function formRep(r){
   openModal(`<h2>${nuevo?"Nuevo reproductor":"Editar reproductor"}</h2>
   <form class="f" id="fRep">
     <div class="two"><label>Arete / número<input id="rTag" value="${esc(r.tag||"")}" required></label><label>Nombre<input id="rNom" value="${esc(r.nombre||"")}"></label></div>
-    <div class="two"><label>Tipo<select id="rTipo">${opts(TIPOS_REP,r.tipo)}</select></label><label>Raza o línea<input id="rRaza" value="${esc(r.raza||"")}" placeholder="Landrace × Yorkshire"></label></div>
-    <div class="two"><label>Fecha de nacimiento<input id="rNac" type="date" value="${r.nac||""}"></label><label>Ingreso a la granja<input id="rIng" type="date" value="${r.ingreso||""}"></label></div>
+    <div class="two"><label>Tipo<select id="rTipo">${opts(TIPOS_REP,r.tipo)}</select></label><label>Fecha de nacimiento<input id="rNac" type="date" value="${r.nac||""}"></label></div>
+    <label>Raza o línea genética<select id="rRaza">${razaOpts(r.raza||"")}</select></label>
+    <div class="addrow" id="rNueva" hidden><input id="rRazaN" maxlength="40" placeholder="Nombre de la nueva raza" aria-label="Nombre de la nueva raza"><button type="button" class="btn" id="rRazaOk">Agregar</button></div>
+    <label>Ingreso a la granja<input id="rIng" type="date" value="${r.ingreso||""}"></label>
     ${nuevo?`<label>Costo de compra (opcional)<input id="rCosto" type="number" min="0" step="0.01" inputmode="decimal"><span class="hint">Si la compraste, se anota como gasto “Compra de animales” del centro Cría.</span></label>`:""}
     ${!nuevo&&r.estado!=="baja"?`<h3 style="margin:8px 0 0">Dar de baja</h3>
       <div class="two"><label>Motivo<select id="bMot"><option value="">— Sigue activo —</option>${opts(["Venta","Descarte","Muerte"])}</select></label><label>Fecha<input id="bFec" type="date" value="${hoy()}"></label></div>
@@ -627,10 +956,16 @@ function formRep(r){
     ${r.estado==="baja"?`<div class="notice" style="margin:0">Dado de baja por <b>${esc(r.bajaMotivo)}</b> el ${fl(r.bajaFecha)}.</div>`:""}
     ${footer(!nuevo)}
   </form>`,root=>{
+    const sel=root.querySelector("#rRaza"),nv=root.querySelector("#rNueva"),inp=root.querySelector("#rRazaN");
+    sel.onchange=()=>{nv.hidden=sel.value!=="__nueva";if(!nv.hidden)inp.focus()};
+    const addR=()=>{const n=agregarRaza(inp.value);if(!n){toast("Escribí el nombre de la raza");inp.focus();return}sel.innerHTML=razaOpts(n);sel.value=n;nv.hidden=true;inp.value="";toast("“"+n+"” agregada a la lista")};
+    root.querySelector("#rRazaOk").onclick=addR;
+    inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();addR()}};
     root.querySelector("#fRep").onsubmit=ev=>{ev.preventDefault();
+      let raza=sel.value;if(raza==="__nueva"){raza=agregarRaza(inp.value)||""}
       const tag=val(root,"rTag");
       if(Object.values(S.rep).some(x=>x.id!==r.id&&x.estado!=="baja"&&x.tag===tag)){toast("Ya hay un animal activo con el arete "+tag);return}
-      const o={...r,id:r.id||uid(),tag,nombre:val(root,"rNom"),tipo:val(root,"rTipo"),raza:val(root,"rRaza"),nac:val(root,"rNac"),ingreso:val(root,"rIng")};
+      const o={...r,id:r.id||uid(),tag,nombre:val(root,"rNom"),tipo:val(root,"rTipo"),raza,nac:val(root,"rNac"),ingreso:val(root,"rIng")};
       if(nuevo){mov({tipo:"Alta",fecha:o.ingreso||hoy(),repId:o.id,cabezas:1,nota:o.tipo});const cst=numv(root,"rCosto");
         if(cst>0)finAdd({tipo:"gasto",fecha:o.ingreso||hoy(),cat:"Compra de animales",centro:"Cría",monto:cst,nota:"Compra "+o.tipo.toLowerCase()+" #"+tag})}
       const mot=val(root,"bMot");
@@ -652,7 +987,7 @@ function verLote(l){
   <div><span>Desde</span><span>${fl(l.inicio)}</span></div><div><span>Días</span><span class="num">${dias(l.inicio,hoy())}</span></div>
   ${madre?`<div><span>Madre</span><span>#${esc(madre.tag)}</span></div>`:""}<div><span>Peso total aprox.</span><span class="num">${l.peso?nf0.format(l.peso*l.cabezas)+" kg":"—"}</span></div></div>
   <div class="row" style="margin-top:14px">${["Venta","Muerte","Traslado","Pesaje"].map(t=>`<button class="btn sm${t==="Venta"?" pri":""}" data-act="movLote" data-t="${t}" data-id="${l.id}">${t==="Traslado"?"Cambiar etapa":t==="Pesaje"?"Pesar":t==="Muerte"?"Registrar muerte":"Vender"}</button>`).join("")}</div>
-  <h3>Movimientos del lote</h3><div class="list">${ms.length?ms.map(movRow).join(""):`<div class="empty">Sin movimientos.</div>`}</div>
+  ${sec("m-lmov","Movimientos del lote ("+ms.length+")",ms.length?"Último: "+esc(ms[0].tipo.toLowerCase())+" · "+fl(ms[0].fecha):"Sin movimientos",`<div class="list">${ms.length?ms.map(movRow).join(""):`<div class="empty">Sin movimientos.</div>`}</div>`)}
   <div class="actions" style="margin-top:14px"><button type="button" class="btn danger" data-arm>Eliminar lote</button><button class="btn" data-act="close">Cerrar</button></div>`,root=>{
     armDelete(root,()=>{delete S.lotes[l.id];Object.values(S.movs).forEach(m=>{if(m.loteId===l.id)delete S.movs[m.id]});commit("Lote eliminado")});
   });
@@ -759,6 +1094,11 @@ document.addEventListener("click",ev=>{
     case "nuevoIng":formFin(null,"ingreso");break;
     case "editFin":formFin(S.fin[id]);break;
     case "csv":exportCsv();break;
+    case "sec":toggleSec(b);break;
+    case "pdf":generarPDF(b.dataset.k);break;
+    case "agregarInv":agregarInv();break;
+    case "addRaza":{const i=$("#ajRaza"),n=agregarRaza(i&&i.value);if(!n){toast("Escribí el nombre de la raza");break}render();toast("“"+n+"” agregada a la lista");break}
+    case "delRaza":if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Tocá de nuevo";break}S.cfg.razas=(S.cfg.razas||[]).filter(x=>x!==b.dataset.k);saveLocal();render();toast("Raza quitada de la lista");break;
     case "pedirCodigo":pedirCodigo();break;
     case "copiarId":copiarId();break;
     case "respaldo":{const h=hoy();guardarArchivo("respaldo-granja-"+h+".json",JSON.stringify({app:"granja-porcina",v:1,fecha:h,data:snapshot()}),()=>{S.cfg.ultimoRespaldo=h;saveLocal();render();toast("Respaldo listo")});break}
@@ -788,15 +1128,15 @@ document.addEventListener("submit",async ev=>{
       $("#rBtn").textContent="Confirmar";return}
     COLS.forEach(c=>S[c]=d[c]||{});S.cfg={...DEF_CFG,...(d.cfg||{})};pendRest=null;saveLocal();render();toast("Respaldo restaurado");return}
   if(ev.target.id==="fCfg"){ev.preventDefault();
-    S.cfg={...S.cfg,granja:$("#cGr").value.trim()||DEF_CFG.granja,moneda:$("#cMon").value.trim()||"C$",gest:+$("#cGest").value||114,lact:+$("#cLact").value||21};
+    S.cfg={...S.cfg,granja:$("#cGr").value.trim()||DEF_CFG.granja,prop:$("#cProp").value.trim(),tel:$("#cTel").value.trim(),dir:$("#cDir").value.trim(),moneda:$("#cMon").value.trim()||"C$",gest:+$("#cGest").value||114,lact:+$("#cLact").value||21};
     saveLocal();render();toast("Ajustes guardados")}
 });
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(document.getElementById("pdfv"))cerrarPDF();else closeModal()}});
 
 /* ---------- Datos de ejemplo ---------- */
 function sembrar(){
   const d=n=>addD(hoy(),n),E={ejemplo:true},T=()=>new Date().toISOString();
-  const rp=(tag,nombre,tipo,nacD)=>{const o={id:uid(),tag,nombre,tipo,raza:tipo==="Verraco"?"Duroc":"Landrace × Yorkshire",nac:d(nacD),ingreso:d(nacD+60),estado:"activo",...E};S.rep[o.id]=o;return o};
+  const rp=(tag,nombre,tipo,nacD)=>{const o={id:uid(),tag,nombre,tipo,raza:tipo==="Verraco"?"Duroc":"Landrace × Yorkshire (F1)",nac:d(nacD),ingreso:d(nacD+60),estado:"activo",...E};S.rep[o.id]=o;return o};
   const c1=rp("C-01","Rosita","Cerda",-900),c2=rp("C-02","Manchas","Cerda",-760),c3=rp("C-03","Canela","Cerda",-820),p4=rp("P-04","","Primeriza",-260);rp("V-01","Tronco","Verraco",-700);
   const ev=(c,tipo,dd,x)=>{const o={id:uid(),cerda:c.id,tipo,fecha:d(dd),creado:T(),...E,...x};S.eventos[o.id]=o;return o};
   const lt=(nombre,etapa,cab,iniD,peso,x)=>{const o={id:uid(),nombre,etapa,cabezas:cab,inicio:d(iniD),peso,activo:true,...E,...x};S.lotes[o.id]=o;return o};

@@ -178,10 +178,15 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body.pv-on{overflow:hidden}
 .pv-top{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px));background:var(--surface);border-bottom:1px solid var(--line)}
 .pv-x{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:600;font-size:14px;flex:none}
-.pv-t{min-width:0;display:grid}.pv-t b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pv-t small{font-size:12px;color:var(--muted)}
-.pv-body{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:14px 12px 20px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.pv-page{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:10px}
-.pv-page canvas{border-radius:6px;box-shadow:0 2px 0 #0002,0 10px 24px -10px #000a;background:#fff;max-width:100%}
+.pv-t{min-width:0;display:grid;flex:1}.pv-t b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pv-t small{font-size:12px;color:var(--muted)}
+.pv-body{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:14px 12px 20px;position:relative;touch-action:pan-x pan-y;overscroll-behavior:contain}
+.pv-zoom{width:max-content;min-width:100%;transform-origin:0 0;will-change:transform}
+.pv-zm{display:flex;align-items:center;gap:4px;flex:none}
+.pv-zm button{min-width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-weight:700;font-size:19px;line-height:1;padding:0 8px}
+.pv-zm .pv-pct{font-size:12px;min-width:54px;font-family:var(--f-num);font-weight:500}
+.pv-tip{flex-basis:100%;text-align:center;font-size:12px;color:var(--muted)}
+.pv-page{display:flex;flex-direction:column;align-items:center;gap:6px;margin:0 auto 12px}
+.pv-page canvas{border-radius:6px;box-shadow:0 2px 0 #0002,0 10px 24px -10px #000a;background:#fff;display:block}
 .pv-page span{font-size:11.5px;color:var(--muted)}
 .pv-bar{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:10px max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));background:var(--surface);border-top:1px solid var(--line)}
 .pv-bar .btn{flex:1;min-width:140px;padding:12px 14px;font-size:15px}
@@ -969,7 +974,7 @@ function generarPDF(k){
 /* ---------- Visor de PDF dentro de la app ---------- */
 function pdfTexto(hex){let s="";const R={};Object.entries(PDF_SPECIAL).forEach(([k,v])=>{if(v>=0x80)R[v]=k});for(let i=0;i<hex.length;i+=2){const c=parseInt(hex.substr(i,2),16);s+=R[c]||String.fromCharCode(c)}return s}
 function pintarPagina(cv,ops,logoImg,ancho){
-  const W=595.28,H=841.89,dpr=Math.min(3,window.devicePixelRatio||2),k=ancho/W;
+  const W=595.28,H=841.89,k=ancho/W,dpr=Math.min(3,window.devicePixelRatio||2,Math.sqrt(1.2e7/(W*k*H*k)));
   cv.width=Math.round(W*k*dpr);cv.height=Math.round(H*k*dpr);cv.style.width=ancho+"px";cv.style.height=Math.round(H*k)+"px";
   const g=cv.getContext("2d");g.setTransform(k*dpr,0,0,k*dpr,0,0);g.fillStyle="#fff";g.fillRect(0,0,W,H);
   const rgb=(r,gg,b)=>`rgb(${Math.round(r*255)},${Math.round(gg*255)},${Math.round(b*255)})`;let m;
@@ -987,16 +992,38 @@ function verPDF(nombre,doc){
   cerrarPDF();
   let share=false;try{share=PROPIA&&!!(navigator.canShare&&navigator.canShare({files:[file]}))}catch(e){}
   const ov=document.createElement("div");ov.id="pdfv";ov.setAttribute("role","dialog");ov.setAttribute("aria-modal","true");ov.setAttribute("aria-label",nombre);
-  ov.innerHTML=`<div class="pv-top"><button class="pv-x" data-pv="cerrar" aria-label="Cerrar">‹ Volver</button><div class="pv-t"><b>${esc(nombre)}</b><small>${pags.length} página${pags.length===1?"":"s"} · PDF</small></div></div>
-  <div class="pv-body"></div>
-  <div class="pv-bar">${share?`<button class="btn" data-pv="compartir">Compartir</button>`:""}<button class="btn pri" data-pv="guardar">Guardar PDF</button></div>`;
+  ov.innerHTML=`<div class="pv-top"><button class="pv-x" data-pv="cerrar" aria-label="Cerrar">‹ Volver</button><div class="pv-t"><b>${esc(nombre)}</b><small>${pags.length} página${pags.length===1?"":"s"} · PDF</small></div>
+  <div class="pv-zm"><button data-pv="menos" aria-label="Alejar">−</button><button class="pv-pct" data-pv="ajustar" aria-label="Ajustar al ancho">100%</button><button data-pv="mas" aria-label="Acercar">+</button></div></div>
+  <div class="pv-body"><div class="pv-zoom"></div></div>
+  <div class="pv-bar"><div class="pv-tip">Pellizcá con dos dedos o tocá dos veces para ampliar; arrastrá para moverte.</div>${share?`<button class="btn" data-pv="compartir">Compartir</button>`:""}<button class="btn pri" data-pv="guardar">Guardar PDF</button></div>`;
   document.body.appendChild(ov);document.body.classList.add("pv-on");
-  const body=ov.querySelector(".pv-body"),ancho=Math.min(820,(body.clientWidth||380)-24);
-  let logoImg=null;const dibujar=()=>{body.innerHTML="";pags.forEach((ops,i)=>{const w=document.createElement("div");w.className="pv-page";const cv=document.createElement("canvas");cv.setAttribute("aria-label","Página "+(i+1));w.appendChild(cv);const n=document.createElement("span");n.textContent="Página "+(i+1)+" de "+pags.length;w.appendChild(n);body.appendChild(w);pintarPagina(cv,ops,logoImg,ancho)})};
-  if(doc.logoSrc){logoImg=new Image();logoImg.onload=dibujar;logoImg.onerror=dibujar;logoImg.src=doc.logoSrc}else dibujar();
+  const body=ov.querySelector(".pv-body"),zw=ov.querySelector(".pv-zoom"),pct=ov.querySelector(".pv-pct");
+  const base=Math.min(820,(body.clientWidth||380)-24),ZMIN=1,ZMAX=4,PASOS=[1,1.5,2,3,4];
+  let z=1,logoImg=null;const cvs=[];
+  const pintar=()=>{cvs.forEach((cv,i)=>pintarPagina(cv,pags[i],logoImg,Math.round(base*z)));pct.textContent=Math.round(z*100)+"%"};
+  const armar=()=>{zw.innerHTML="";cvs.length=0;pags.forEach((ops,i)=>{const w=document.createElement("div");w.className="pv-page";const cv=document.createElement("canvas");cv.setAttribute("aria-label","Página "+(i+1));w.appendChild(cv);const n=document.createElement("span");n.textContent="Página "+(i+1)+" de "+pags.length;w.appendChild(n);zw.appendChild(w);cvs.push(cv)});pintar()};
+  const zoomA=(nz,fx,fy)=>{nz=Math.max(ZMIN,Math.min(ZMAX,nz));if(Math.abs(nz-z)<.01)return;
+    if(fx==null){fx=body.clientWidth/2;fy=body.clientHeight/2}
+    const cx=body.scrollLeft+fx,cy=body.scrollTop+fy,r=nz/z;z=nz;pintar();body.scrollLeft=cx*r-fx;body.scrollTop=cy*r-fy};
+  if(doc.logoSrc){logoImg=new Image();logoImg.onload=armar;logoImg.onerror=armar;logoImg.src=doc.logoSrc}else armar();
+  /* pellizco con dos dedos, doble toque y rueda con Ctrl */
+  const rel=(x,y)=>{const r=body.getBoundingClientRect();return [x-r.left,y-r.top]};
+  const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+  let pz=null,ult=0,ux=0,uy=0;
+  body.addEventListener("touchstart",e=>{if(e.touches.length===2){const [mx,my]=rel((e.touches[0].clientX+e.touches[1].clientX)/2,(e.touches[0].clientY+e.touches[1].clientY)/2);
+    pz={d0:dist(e.touches)||1,mx,my,s:1};zw.style.transformOrigin=(body.scrollLeft+mx-zw.offsetLeft)+"px "+(body.scrollTop+my-zw.offsetTop)+"px";ult=0;e.preventDefault()}},{passive:false});
+  body.addEventListener("touchmove",e=>{if(pz&&e.touches.length===2){const nz=Math.max(ZMIN,Math.min(ZMAX,z*dist(e.touches)/pz.d0));pz.s=nz/z;zw.style.transform="scale("+pz.s+")";e.preventDefault()}},{passive:false});
+  body.addEventListener("touchend",e=>{
+    if(pz){if(e.touches.length<2){const q=pz;pz=null;zw.style.transform="";zoomA(z*q.s,q.mx,q.my);ult=0}return}
+    if(e.touches.length===0&&e.changedTouches.length===1){const t=e.changedTouches[0],now=Date.now(),[x,y]=rel(t.clientX,t.clientY);
+      if(now-ult<320&&Math.hypot(x-ux,y-uy)<30){zoomA(z>1.2?1:2.5,x,y);ult=0;e.preventDefault()}else{ult=now;ux=x;uy=y}}},{passive:false});
+  body.addEventListener("touchcancel",()=>{if(pz){pz=null;zw.style.transform=""}});
+  body.addEventListener("wheel",e=>{if(!e.ctrlKey)return;e.preventDefault();const [x,y]=rel(e.clientX,e.clientY);zoomA(z*Math.exp(-e.deltaY*0.01),x,y)},{passive:false});
+  body.addEventListener("dblclick",e=>{const [x,y]=rel(e.clientX,e.clientY);zoomA(z>1.2?1:2.5,x,y)});
   PDFV={file,bytes,nombre};
   ov.addEventListener("click",async e=>{const b=e.target.closest("[data-pv]");if(!b||!PDFV)return;const a=b.dataset.pv;
-    if(a==="cerrar")cerrarPDF();else if(a==="compartir")compartirPDF(PDFV.file);else if(a==="guardar")guardarPDF(PDFV.file,PDFV.bytes)});
+    if(a==="cerrar")cerrarPDF();else if(a==="compartir")compartirPDF(PDFV.file);else if(a==="guardar")guardarPDF(PDFV.file,PDFV.bytes);
+    else if(a==="mas")zoomA(PASOS.find(x=>x>z+.01)||ZMAX);else if(a==="menos")zoomA([...PASOS].reverse().find(x=>x<z-.01)||ZMIN);else if(a==="ajustar")zoomA(1)});
 }
 function cerrarPDF(){const o=document.getElementById("pdfv");if(o)o.remove();document.body.classList.remove("pv-on");PDFV=null}
 async function guardarPDF(f,bytes){
